@@ -11,7 +11,8 @@ import {
   AlertTriangle,
   Clock,
   Sliders,
-  XCircle
+  XCircle,
+  Cpu
 } from 'lucide-react';
 
 interface PortfolioRoadmapViewProps {
@@ -59,16 +60,16 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
             <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
               <span className="font-semibold text-slate-900">Section 18 Portfolio Architecture</span>
               <span aria-hidden="true">·</span>
-              <span>Dual-Clock Trigger-Gate Execution</span>
+              <span>Tri-Championship 4-Stage Master Plan</span>
               <span aria-hidden="true">·</span>
               <span>Solo Operator (20h/Wk Cap)</span>
             </div>
             <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
               <GitPullRequest className="w-5 h-5 text-slate-800" />
-              <span>Portfolio Sequencing: The Dual-Clock Velocity Model</span>
+              <span>Portfolio Sequencing: The 4-Stage DecaFleet Execution Master Plan</span>
             </h1>
             <p className="text-sm text-slate-600 mt-1 max-w-3xl">
-              In 2026, static 6-to-12-month calendars are dead—and launching 3 separate B2B businesses in 12 days is operational suicide. Sequence expansion strictly by <strong>State-Gate Triggers</strong>.
+              Synthesizing <strong>Ara - Grok's</strong> zero-login GC compliance wedge (Sub Radar + Trade Map Cross-Sell) with <strong>GPT_Buiness's</strong> corporate exception desks and <strong>Hermes + Stagehand + DBOS</strong> self-healing infrastructure.
             </p>
           </div>
 
@@ -81,7 +82,7 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              45-Day Trigger Blitz
+              60-Day Trigger Blitz
             </button>
             <button
               onClick={() => setVelocityMode('days12')}
@@ -111,39 +112,39 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
       <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-slate-900">
-            The Architect's Verdict: Why "6–12 Months" Is Dead &amp; Why "3/6/12 Days" Fails
+            The Architect's Verdict: Why Stage 1 + Stage 2 Share the Exact Same Buyer List
           </h2>
-          <span className="text-xs text-slate-500 font-mono">Dual-Clock Physics</span>
+          <span className="text-xs text-slate-500 font-mono">Zero-Login First · Dual-Clock Physics</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-4 bg-emerald-50/50 border border-emerald-200/70 rounded-lg space-y-2">
             <div className="font-bold text-emerald-950 flex items-center justify-between">
-              <span>1. Where You Are 100% Right: The Tech Clock</span>
-              <span className="font-mono text-[11px] text-emerald-800">36–48 Hours</span>
+              <span>1. Stage 1 Zero-Ban Wedge (Sub Radar)</span>
+              <span className="font-mono text-[11px] text-emerald-800">24h Build · $0 API</span>
             </div>
             <p className="text-slate-700 leading-relaxed">
-              Waiting 90 or 180 days to build a second agent fleet in 2026 is absurd. Standing up a 10-bot browser workflow by demonstration takes <strong>36 to 48 hours</strong>, not 3 months. Platform anti-bot defenses and LLM capabilities mutate every 30 days—a static 12-month technical plan is obsolete before Month 2.
+              Instead of fighting LinkedIn/Amazon IP blocks on Day 1, <strong>Sub Radar (C1)</strong> queries public state contractor registries (CSLB, TDLR, DBPR). Zero client logins, zero 2FA interruptions, and immediate $149 Roster Audit cash that converts into $399/mo monitoring.
             </p>
           </div>
 
-          <div className="p-4 bg-rose-50/50 border border-rose-200/70 rounded-lg space-y-2">
-            <div className="font-bold text-rose-950 flex items-center justify-between">
-              <span>2. Where I Push Back: The Buyer &amp; Ops Clock</span>
-              <span className="font-mono text-[11px] text-rose-800">14-Day Minimum</span>
+          <div className="p-4 bg-blue-50/50 border border-blue-200/70 rounded-lg space-y-2">
+            <div className="font-bold text-blue-950 flex items-center justify-between">
+              <span>2. Stage 2 Zero-CAC Cross-Sell (Trade Map)</span>
+              <span className="font-mono text-[11px] text-blue-800">+$449/mo Upsell</span>
             </div>
             <p className="text-slate-700 leading-relaxed">
-              Bots compress <em>software build time</em> to hours, but they do <strong>not</strong> compress human B2B procurement trust, commercial HVAC estimator call schedules, or churn validation into 72 hours. Launching 3 different ICPs in 12 days means running 3 cold outbound campaigns, 3 sales calendars, and debugging 3 sets of broken DOM selectors at once—shattering the 20h/week human limit (34h+ required) with $0 stabilized MRR.
+              Launching a second business to a brand-new ICP doubles sales overhead. Instead, <strong>Trade Map Desk (P1)</strong> sells to the <em>exact same Commercial &amp; Trade Contractors</em> already paying for Sub Radar—lifting LTV from $399/mo to $848/mo with zero extra cold outreach.
             </p>
           </div>
 
           <div className="p-4 bg-slate-900 text-slate-100 rounded-lg space-y-2">
             <div className="font-bold text-amber-400 flex items-center justify-between">
-              <span>3. The Synthesis: Trigger-Gated Sprints</span>
-              <span className="font-mono text-[11px] text-slate-300">Day 14 &amp; Day 30</span>
+              <span>3. Stage 3 &amp; 4 High-Ticket Scale (GPT + Hermes)</span>
+              <span className="font-mono text-[11px] text-slate-300">$1k–$1.8k/mo Deals</span>
             </div>
             <p className="text-slate-300 leading-relaxed">
-              Replace calendar months with <strong>State-Gate Triggers</strong>. You build Fleet #1 in 36 hours, collect first cash by Day 7, and run <strong>2 weekly autonomous delivery cycles (Days 7–14)</strong> to prove zero DOM breakage. The exact day Gate 1 clears (Day 15), you spin up Fleet #2 in 48 hours.
+              Once contractor cashflow hits $12k+ MRR, unlock <strong>Catalog Exception Desk (P2)</strong> at $1,000/mo and <strong>Fleet Collision Lab (C2)</strong> at $1,800/mo—backed by the <strong>Hermes + Stagehand + DBOS</strong> self-healing container stack.
             </p>
           </div>
         </div>
@@ -158,179 +159,246 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
               12-Day Multi-Launch Failure Mode Simulation Active
             </div>
             <p className="leading-relaxed">
-              Attempting to launch P2 on Day 1, C1 on Day 4, and C2 on Day 8 forces the single human operator to conduct cold sales across SaaS VPs, blue-collar municipal painters, and enterprise DTC CMOs simultaneously. Total human workload spikes to <strong>36.5 hours/week</strong> (violating the 20h constraint), while all 10 browser slots collide during daytime scraping before night-shift scheduling is calibrated.
+              Attempting to launch Sub Radar on Day 1, Catalog Exception Desk on Day 4, and Fleet Collision Lab on Day 8 forces the single human operator to conduct cold sales across commercial GCs, Shopify Plus Merchandising Managers, and SaaS QA VPs simultaneously. Total human workload spikes to <strong>36.5 hours/week</strong> (violating the 20h constraint), while single-pointer fallback collisions stall uncalibrated browser workers.
             </p>
           </div>
         </div>
       )}
 
-      {/* Visual Roadmap Sequence Timeline */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Visual 4-Stage Roadmap Sequence Timeline */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Stage 1 */}
-        <div className="bg-white border-2 border-slate-900 rounded-lg p-6 space-y-4 shadow-sm relative">
-          <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 bg-slate-900 text-white rounded text-xs font-mono font-bold">
-              {velocityMode === 'blitz45'
-                ? PORTFOLIO_ROADMAP.stage1.period
-                : velocityMode === 'days12'
-                ? 'Day 1 – Day 3 (Premature)'
-                : PORTFOLIO_ROADMAP.stage1.legacyPeriod}
-            </span>
-            <Zap className="w-4 h-4 text-amber-500" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="font-bold uppercase tracking-wider">Start First</span>
-              <span aria-hidden="true">·</span>
-              <span className="font-mono text-slate-700">Tech Build: {PORTFOLIO_ROADMAP.stage1.techBuildTime}</span>
+        <div className="bg-white border-2 border-slate-900 rounded-lg p-5 space-y-4 shadow-sm flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="px-2.5 py-1 bg-slate-900 text-white rounded text-xs font-mono font-bold">
+                {velocityMode === 'blitz45'
+                  ? PORTFOLIO_ROADMAP.stage1.period
+                  : velocityMode === 'days12'
+                  ? 'Day 1 – Day 3'
+                  : PORTFOLIO_ROADMAP.stage1.legacyPeriod}
+              </span>
+              <Zap className="w-4 h-4 text-amber-500" />
             </div>
-            <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-              {PORTFOLIO_ROADMAP.stage1.name} (P2)
-            </h2>
-            <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
-              Target: {PORTFOLIO_ROADMAP.stage1.mrrTarget}
+
+            <div>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                <span className="font-bold uppercase tracking-wider text-emerald-700">Stage 1 Wedge</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono text-slate-700">Build: {PORTFOLIO_ROADMAP.stage1.techBuildTime}</span>
+              </div>
+              <h2 className="text-base font-bold text-slate-900 mt-0.5">
+                {PORTFOLIO_ROADMAP.stage1.name} (C1)
+              </h2>
+              <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
+                Target: {PORTFOLIO_ROADMAP.stage1.mrrTarget}
+              </div>
             </div>
-          </div>
 
-          <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
-            <strong>The Single Reason:</strong> {PORTFOLIO_ROADMAP.stage1.singleReason}
-          </p>
+            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
+              <strong>Why First:</strong> {PORTFOLIO_ROADMAP.stage1.singleReason}
+            </p>
 
-          <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
-            <strong>Exit Gate to Stage 2:</strong> {PORTFOLIO_ROADMAP.stage1.unlockGate}
-          </div>
-
-          <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 1–2: Build JobSpy &amp; PeopleFind skills (36h)</span>
+            <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
+              <strong>Unlock Gate 1:</strong> {PORTFOLIO_ROADMAP.stage1.unlockGate}
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 6–7: First $1,000 cash collected via Stripe</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 8–14: Prove 2 autonomous delivery cycles</span>
-            </div>
-          </div>
 
-          <button
-            onClick={() => onSelectBusiness('p2')}
-            className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-          >
-            <span>Open P2 Handbook</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Stage 2 */}
-        <div className="bg-white border border-slate-200 rounded-lg p-6 space-y-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded text-xs font-mono font-bold">
-              {velocityMode === 'blitz45'
-                ? PORTFOLIO_ROADMAP.stage2.period
-                : velocityMode === 'days12'
-                ? 'Day 4 – Day 7 (Overload)'
-                : PORTFOLIO_ROADMAP.stage2.legacyPeriod}
-            </span>
-            <ShieldCheck className="w-4 h-4 text-blue-600" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="font-bold uppercase tracking-wider">Unlock on Gate 1</span>
-              <span aria-hidden="true">·</span>
-              <span className="font-mono text-slate-700">Tech Build: {PORTFOLIO_ROADMAP.stage2.techBuildTime}</span>
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-              {PORTFOLIO_ROADMAP.stage2.name} (C1)
-            </h2>
-            <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
-              Target: {PORTFOLIO_ROADMAP.stage2.mrrTarget}
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
-            <strong>The Single Reason:</strong> {PORTFOLIO_ROADMAP.stage2.singleReason}
-          </p>
-
-          <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
-            <strong>Exit Gate to Stage 3:</strong> {PORTFOLIO_ROADMAP.stage2.unlockGate}
-          </div>
-
-          <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 15–16: Train ASP.NET portal traverser (48h)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 21: First $1,800/mo trade contractor signed</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 22–30: Stabilize Tesseract OCR spec parser</span>
+            <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 1–2: Train CSLB/TDLR/DBPR crawlers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 4: First $149 40-Sub Roster Audit sold</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 7–14: Convert to $399/mo retainers</span>
+              </div>
             </div>
           </div>
 
           <button
             onClick={() => onSelectBusiness('c1')}
+            className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>Open C1 Sub Radar</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Stage 2 */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-xs flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded text-xs font-mono font-bold">
+                {velocityMode === 'blitz45'
+                  ? PORTFOLIO_ROADMAP.stage2.period
+                  : velocityMode === 'days12'
+                  ? 'Day 4 – Day 6'
+                  : PORTFOLIO_ROADMAP.stage2.legacyPeriod}
+              </span>
+              <ShieldCheck className="w-4 h-4 text-blue-600" />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                <span className="font-bold uppercase tracking-wider text-blue-700">Stage 2 Cross-Sell</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono text-slate-700">Build: {PORTFOLIO_ROADMAP.stage2.techBuildTime}</span>
+              </div>
+              <h2 className="text-base font-bold text-slate-900 mt-0.5">
+                {PORTFOLIO_ROADMAP.stage2.name} (P1)
+              </h2>
+              <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
+                Target: {PORTFOLIO_ROADMAP.stage2.mrrTarget}
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
+              <strong>Why Second:</strong> {PORTFOLIO_ROADMAP.stage2.singleReason}
+            </p>
+
+            <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
+              <strong>Unlock Gate 2:</strong> {PORTFOLIO_ROADMAP.stage2.unlockGate}
+            </div>
+
+            <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 15–16: Train GBP &amp; 40-directory auditors</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 20: Upsell existing Sub Radar GCs (+$449/mo)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 25: Add Claude P3 $75 Metadata Audits</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => onSelectBusiness('p1')}
             className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span>Open C1 Handbook</span>
+            <span>Open P1 Trade Map Desk</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Stage 3 */}
-        <div className="bg-white border border-slate-200 rounded-lg p-6 space-y-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded text-xs font-mono font-bold">
-              {velocityMode === 'blitz45'
-                ? PORTFOLIO_ROADMAP.stage3.period
-                : velocityMode === 'days12'
-                ? 'Day 8 – Day 12 (Collision)'
-                : PORTFOLIO_ROADMAP.stage3.legacyPeriod}
-            </span>
-            <Award className="w-4 h-4 text-purple-600" />
+        <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-xs flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded text-xs font-mono font-bold">
+                {velocityMode === 'blitz45'
+                  ? PORTFOLIO_ROADMAP.stage3.period
+                  : velocityMode === 'days12'
+                  ? 'Day 7 – Day 9'
+                  : PORTFOLIO_ROADMAP.stage3.legacyPeriod}
+              </span>
+              <Award className="w-4 h-4 text-purple-600" />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                <span className="font-bold uppercase tracking-wider text-purple-700">Stage 3 Corporate</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono text-slate-700">Build: {PORTFOLIO_ROADMAP.stage3.techBuildTime}</span>
+              </div>
+              <h2 className="text-base font-bold text-slate-900 mt-0.5">
+                {PORTFOLIO_ROADMAP.stage3.name} (P2)
+              </h2>
+              <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
+                Target: {PORTFOLIO_ROADMAP.stage3.mrrTarget}
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
+              <strong>Why Third:</strong> {PORTFOLIO_ROADMAP.stage3.singleReason}
+            </p>
+
+            <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
+              <strong>Unlock Gate 3:</strong> {PORTFOLIO_ROADMAP.stage3.unlockGate}
+            </div>
+
+            <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 31–33: Deploy FeedScout &amp; MarginGuard</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 36: Close $299 500-SKU Exception Triage</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Day 42: Convert to $1,000/mo Core Desk</span>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="font-bold uppercase tracking-wider">Unlock on Gate 2</span>
-              <span aria-hidden="true">·</span>
-              <span className="font-mono text-slate-700">Tech Build: {PORTFOLIO_ROADMAP.stage3.techBuildTime}</span>
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-              {PORTFOLIO_ROADMAP.stage3.name} (C2)
-            </h2>
-            <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
-              Target: {PORTFOLIO_ROADMAP.stage3.mrrTarget}
-            </div>
-          </div>
+          <button
+            onClick={() => onSelectBusiness('p2')}
+            className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>Open P2 Catalog Desk</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
-          <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
-            <strong>The Single Reason:</strong> {PORTFOLIO_ROADMAP.stage3.singleReason}
-          </p>
-
-          <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
-            <strong>Scale Architecture:</strong> {PORTFOLIO_ROADMAP.stage3.unlockGate}
-          </div>
-
-          <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 31–32: Deploy 00:00–06:00 geo-proxy bots</span>
+        {/* Stage 4 */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-xs flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded text-xs font-mono font-bold">
+                {velocityMode === 'blitz45'
+                  ? PORTFOLIO_ROADMAP.stage4.period
+                  : velocityMode === 'days12'
+                  ? 'Day 10 – Day 12'
+                  : PORTFOLIO_ROADMAP.stage4.legacyPeriod}
+              </span>
+              <Cpu className="w-4 h-4 text-emerald-600" />
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 37: Close first $2,500/mo brand defense deal</span>
+
+            <div>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                <span className="font-bold uppercase tracking-wider text-slate-700">Stage 4 Ceiling</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono text-slate-700">Build: {PORTFOLIO_ROADMAP.stage4.techBuildTime}</span>
+              </div>
+              <h2 className="text-base font-bold text-slate-900 mt-0.5">
+                {PORTFOLIO_ROADMAP.stage4.name} (C2 + C3)
+              </h2>
+              <div className="text-xs font-mono font-semibold text-emerald-700 mt-1">
+                Target: {PORTFOLIO_ROADMAP.stage4.mrrTarget}
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Day 45–60: Cross $30k MRR with &lt;15 total clients</span>
+
+            <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded border border-slate-100">
+              <strong>Why Fourth:</strong> {PORTFOLIO_ROADMAP.stage4.singleReason}
+            </p>
+
+            <div className="p-2.5 bg-amber-50/60 border border-amber-200/70 rounded text-[11px] text-slate-800 font-mono">
+              <strong>Scale Architecture:</strong> {PORTFOLIO_ROADMAP.stage4.unlockGate}
+            </div>
+
+            <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Migrate runtime to Hermes + Stagehand + DBOS</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Launch C2 Fleet Collision Lab ($1,800/mo)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Add C3 Seat Sniper &amp; GovDesk ($400–$1,500/mo)</span>
+              </div>
             </div>
           </div>
 
@@ -338,7 +406,7 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
             onClick={() => onSelectBusiness('c2')}
             className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span>Open C2 Handbook</span>
+            <span>Open C2 Collision Lab</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -350,10 +418,10 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
           <div>
             <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
               <Sliders className="w-4 h-4 text-slate-700" />
-              <span>Live Expansion Gate Diagnostic (When Should You Launch the Next Vertical?)</span>
+              <span>Live Expansion Gate Diagnostic (When Should You Unlock the Next Stage?)</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Test whether your current vertical is ready for expansion or if adding a second business today will break your 20h/wk operator ceiling.
+              Test whether your current vertical is ready for expansion or if adding the next stage today will break your 20h/wk operator ceiling.
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -377,7 +445,7 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
           <div className="space-y-4 text-xs">
             <div className="space-y-1">
               <div className="flex justify-between">
-                <label className="font-semibold text-slate-700">Active Paying Retainer Clients (Current Vertical):</label>
+                <label className="font-semibold text-slate-700">Active Paying Retainer Clients (Current Stage):</label>
                 <span className="font-mono font-bold text-slate-900">{retainerClients} Clients</span>
               </div>
               <input
@@ -456,19 +524,19 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
                 {gateCheck.canExpandNow ? (
                   <>
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                    <span>GATE OPEN: Deploy Next 48h Bot Fleet Now</span>
+                    <span>GATE OPEN: Deploy Next Stage Fleet Now</span>
                   </>
                 ) : (
                   <>
                     <XCircle className="w-5 h-5 text-rose-600 shrink-0" />
-                    <span>GATE LOCKED: Do Not Launch Next Vertical Yet</span>
+                    <span>GATE LOCKED: Do Not Launch Next Stage Yet</span>
                   </>
                 )}
               </div>
 
               {gateCheck.canExpandNow ? (
                 <p className="text-xs leading-relaxed text-emerald-900">
-                  Your current vertical has validated cash demand, survived {deliveryCycles} full weekly autonomous delivery cycles without DOM selector drift, and leaves {20 - currentWeeklyHours}h/week of operator bandwidth to execute cold outreach for the next vertical.
+                  Your current stage has validated cash demand, survived {deliveryCycles} full weekly autonomous delivery cycles without DOM selector drift, and leaves {20 - currentWeeklyHours}h/week of operator bandwidth to execute the next stage launch.
                 </p>
               ) : (
                 <div className="space-y-1.5 text-xs">
@@ -483,7 +551,7 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
             </div>
 
             <div className="pt-3 mt-4 border-t border-slate-200/60 flex items-center justify-between text-xs font-mono">
-              <span>Tech Fleet Build Time: 48 Hours</span>
+              <span>Stagehand + DBOS Build Time: 24–48 Hours</span>
               <span>
                 {gateCheck.canExpandNow
                   ? 'Ready for immediate deployment'
@@ -498,25 +566,25 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
       <div className="bg-white border border-slate-200 rounded-lg p-6 space-y-4 shadow-xs">
         <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
           <Clock className="w-4 h-4 text-slate-700" />
-          <span>24-Hour VM Cluster Time-Multiplexing (How 10 Bots Run All 3 Businesses)</span>
+          <span>24-Hour VM Cluster Time-Multiplexing (38,400 Browser-Minutes/Month Budget)</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1.5">
-            <span className="font-bold text-slate-900 block font-mono">00:00 – 06:00 EST · Night Shift (C2)</span>
+            <span className="font-bold text-slate-900 block font-mono">00:00 – 06:00 EST · Night Shift (C1 &amp; C3)</span>
             <p className="text-slate-600 leading-relaxed">
-              <strong>TrafficReclaim (C2)</strong> occupies 6 browser slots using residential geo-proxies when rogue affiliates day-part their trademark hijacks. Zero contention with daytime B2B scraping.
+              <strong>Sub Radar (C1)</strong> and <strong>Seat Sniper (C3)</strong> poll state licensing boards (CSLB, TDLR, DBPR) and municipal inspection release windows at midnight when government databases refresh batch records.
             </p>
           </div>
           <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1.5">
-            <span className="font-bold text-slate-900 block font-mono">06:00 – 12:00 EST · Morning Shift (C1)</span>
+            <span className="font-bold text-slate-900 block font-mono">06:00 – 14:00 EST · Morning Shift (P2 &amp; P1)</span>
             <p className="text-slate-600 leading-relaxed">
-              <strong>GovDesk (C1)</strong> crawls 40 municipal ASP.NET portals as county clerks post morning RFPs, parsing PDF specs and prepping estimator alerts by 11:30 AM.
+              <strong>Catalog Exception Desk (P2)</strong> audits Shopify/Merchant Center feeds before morning ad spend peaks, while <strong>Trade Map Desk (P1)</strong> runs 40-directory NAP citation sweeps.
             </p>
           </div>
           <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1.5">
-            <span className="font-bold text-slate-900 block font-mono">12:00 – 20:00 EST · Afternoon Shift (P2)</span>
+            <span className="font-bold text-slate-900 block font-mono">14:00 – 22:00 EST · Afternoon Shift (C2 &amp; P3)</span>
             <p className="text-slate-600 leading-relaxed">
-              <strong>IntentPipe (P2)</strong> harvests job boards, resolves decision-makers, verifies SMTP handshakes, and syncs enriched dossiers to client CRMs before the next morning's outbound send.
+              <strong>Fleet Collision Lab (C2)</strong> executes synchronized 8-worker staging race-condition suites for SaaS engineering teams, and <strong>No-Login Funnel Desk (P3)</strong> captures unauthenticated checkout diffs.
             </p>
           </div>
         </div>

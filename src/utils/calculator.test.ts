@@ -4,18 +4,19 @@ import {
   calculateUnitEconomics,
   calculateTargetClients,
   calculateCapacityUtilization,
+  calculateBrowserMinuteBudget,
   calculateHumanHours,
   computeTotalScore,
   evaluateExpansionGate
 } from './calculator.ts';
 
 test('calculateUnitEconomics computes revenue, costs, and gross margin accurately', () => {
-  // Test P2: IntentPipe ($2200 price, $80 cost, 5 clients)
-  const result = calculateUnitEconomics(2200, 80, 5);
-  assert.equal(result.mrr, 11000);
-  assert.equal(result.totalCost, 400);
-  assert.equal(result.grossProfit, 10600);
-  assert.equal(result.grossMarginPercent, 96.4);
+  // Test Sub Radar ($399 price, $12 cost, 25 clients)
+  const subRadar = calculateUnitEconomics(399, 12, 25);
+  assert.equal(subRadar.mrr, 9975);
+  assert.equal(subRadar.totalCost, 300);
+  assert.equal(subRadar.grossProfit, 9675);
+  assert.equal(subRadar.grossMarginPercent, 97);
 
   // Test zero clients edge case
   const zeroResult = calculateUnitEconomics(2200, 80, 0);
@@ -27,8 +28,8 @@ test('calculateUnitEconomics computes revenue, costs, and gross margin accuratel
 test('calculateTargetClients calculates client volume thresholds correctly', () => {
   // $30,000 MRR at $2,200/mo -> 14 clients
   assert.equal(calculateTargetClients(30000, 2200), 14);
-  // $10,000 MRR at $750/mo -> 14 clients
-  assert.equal(calculateTargetClients(10000, 750), 14);
+  // $10,000 MRR at $399/mo (Grok Sub Radar) -> 26 clients
+  assert.equal(calculateTargetClients(10000, 399), 26);
   // $30,000 MRR at $1,800/mo -> 17 clients
   assert.equal(calculateTargetClients(30000, 1800), 17);
   // Edge cases
@@ -49,6 +50,22 @@ test('calculateCapacityUtilization computes fleet capacity accurately', () => {
   assert.equal(u2.isSaturated, true);
 });
 
+test('calculateBrowserMinuteBudget models GPT 38,400 min/mo 8-lane vs 4,800 min/mo single-pointer fallback', () => {
+  // 8-Lane Standard Mode: 20 clients * 600 mins/mo = 12,000 / 38,400 mins (31.3% utilization)
+  const multiLane = calculateBrowserMinuteBudget(20, 600, false, 8);
+  assert.equal(multiLane.totalAvailableMinutes, 38400);
+  assert.equal(multiLane.requiredMinutes, 12000);
+  assert.equal(multiLane.utilizationPercent, 31.3);
+  assert.equal(multiLane.maxClientsSupported, 64);
+  assert.equal(multiLane.isPointerBottleNecked, false);
+
+  // Single-Pointer Fallback Mode (4,800 min/mo): 20 clients * 600 mins/mo = 12,000 / 4,800 -> bottlenecked!
+  const singlePointer = calculateBrowserMinuteBudget(20, 600, true, 8);
+  assert.equal(singlePointer.totalAvailableMinutes, 4800);
+  assert.equal(singlePointer.maxClientsSupported, 8);
+  assert.equal(singlePointer.isPointerBottleNecked, true);
+});
+
 test('calculateHumanHours enforces the 20 hour weekly ceiling', () => {
   // 10 clients at 0.5h marginal + 6h base = 11h (within 20h limit)
   const h1 = calculateHumanHours(10, 6, 0.5, 20);
@@ -64,8 +81,8 @@ test('calculateHumanHours enforces the 20 hour weekly ceiling', () => {
 });
 
 test('computeTotalScore correctly sums the 7 candidate vectors', () => {
-  const scores = { spd: 4, cap: 5, mar: 5, ceil: 5, def: 4, fit: 5, wtp: 5 };
-  assert.equal(computeTotalScore(scores), 33);
+  const scores = { spd: 5, cap: 5, mar: 5, ceil: 4, def: 5, fit: 5, wtp: 5 };
+  assert.equal(computeTotalScore(scores), 34);
 });
 
 test('evaluateExpansionGate blocks premature Day-3 expansion and passes when Trigger Gates clear', () => {
@@ -95,4 +112,3 @@ test('evaluateExpansionGate blocks premature Day-3 expansion and passes when Tri
   assert.equal(ready.blockers.length, 0);
   assert.equal(ready.projectedHours, 17);
 });
-

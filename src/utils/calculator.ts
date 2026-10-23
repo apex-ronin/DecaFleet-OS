@@ -62,6 +62,35 @@ export function calculateCapacityUtilization(
 }
 
 /**
+ * GPT_Buiness.md Quantitative Browser-Minute Concurrency Model:
+ * - Standard 8-Lane Mode: 8 active worker lanes * 4,800 browser-min/month = 38,400 browser-min/month (2 bots reserved for Orchestrator/QA).
+ * - Single-Pointer Fallback Mode: 1 active OS cursor lane = 4,800 browser-min/month on shared desktop.
+ */
+export function calculateBrowserMinuteBudget(
+  clientCount: number,
+  browserMinsPerClientPerMonth: number,
+  singlePointerFallback: boolean = false,
+  activeLanes: number = 8
+) {
+  const minsPerLanePerMonth = 4800; // 160 active hours/month * 30 mins/hr effective duty cycle
+  const effectiveLanes = singlePointerFallback ? 1 : Math.max(1, Math.min(10, activeLanes));
+  const totalAvailableMinutes = effectiveLanes * minsPerLanePerMonth; // 38,400 (8 lanes) or 4,800 (1 lane fallback)
+  const requiredMinutes = Math.max(0, clientCount) * Math.max(1, browserMinsPerClientPerMonth);
+  const utilizationPercent = Number(((requiredMinutes / totalAvailableMinutes) * 100).toFixed(1));
+  const maxClientsSupported = Math.floor(totalAvailableMinutes / Math.max(1, browserMinsPerClientPerMonth));
+  const isPointerBottleNecked = requiredMinutes > totalAvailableMinutes;
+
+  return {
+    effectiveLanes,
+    totalAvailableMinutes,
+    requiredMinutes,
+    utilizationPercent,
+    maxClientsSupported,
+    isPointerBottleNecked
+  };
+}
+
+/**
  * Calculates estimated operator human weekly hours with fixed overhead and per-client marginal time.
  */
 export function calculateHumanHours(
@@ -137,4 +166,3 @@ export function evaluateExpansionGate(input: ExpansionGateInput) {
     recommendedWaitDays: blockers.length === 0 ? 0 : Math.max(7, (2 - input.completedDeliveryCycles) * 7)
   };
 }
-

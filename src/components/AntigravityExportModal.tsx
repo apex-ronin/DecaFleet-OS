@@ -261,34 +261,39 @@ ${selectedHandbook.botFleet
             <div className="space-y-4">
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
                 <div className="font-bold text-slate-900">
-                  Step-by-Step: Export Whole App Project into Google Antigravity (ZIP Method)
+                  Method A (No Git Needed): Download ZIP &rarr; Open Folder in Antigravity
                 </div>
                 <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-700 leading-relaxed">
                   <li>
-                    Look at the <strong>top-right header bar of the Google AI Studio window</strong> (outside and right above this preview panel).
+                    In the <strong>top-right corner of Google AI Studio</strong> (next to the Share / Deploy buttons), click the <strong>Download icon</strong> (downward arrow into a tray) to save the <code>.zip</code> file to your <code>Downloads</code> folder.
                   </li>
                   <li>
-                    Click the <strong>Download ZIP icon</strong> (downward arrow icon) to download the entire project file tree (<code>package.json</code>, <code>src/</code>, <code>vite.config.ts</code>, all 6 handbooks, and unit tests).
+                    On your computer, right-click the downloaded <code>.zip</code> file and click <strong>Extract All...</strong> (Windows) or double-click it (Mac) to unzip the folder.
                   </li>
                   <li>
-                    Unzip the downloaded file on your PC (e.g., <code>C:\Projects\decafleet-os</code> or <code>~/decafleet-os</code>).
-                  </li>
-                  <li>
-                    Launch <strong>Google Antigravity</strong> and select <strong>File &rarr; Open Folder...</strong> (or run <code>agy ./decafleet-os</code> in your terminal).
+                    In <strong>Antigravity</strong>, click <strong>Open Folder</strong> (on the welcome screen or under <strong>File &rarr; Open Folder...</strong>) and select that unzipped folder.
                   </li>
                 </ol>
               </div>
 
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
-                <div className="font-bold text-slate-900">
-                  Alternative: Direct GitHub Sync &rarr; Antigravity Clone
+              <div className="p-4 bg-amber-50/80 border border-amber-300 rounded-lg space-y-2">
+                <div className="font-bold text-amber-950 flex items-center justify-between">
+                  <span>
+                    Syncing AI Studio &rarr; Your GitHub Repo (<code>apex-ronin/DecaFleet-OS</code>)
+                  </span>
+                  <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-amber-200 text-amber-900 rounded">
+                    Action Required to Update GitHub
+                  </span>
                 </div>
-                <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-700 leading-relaxed">
+                <ol className="list-decimal list-inside space-y-1.5 text-xs text-amber-950 leading-relaxed">
                   <li>
-                    Click the <strong>GitHub icon</strong> in the top-right Google AI Studio toolbar to push this project directly to a new GitHub repo.
+                    <strong>AI Studio does NOT auto-push on every edit:</strong> The latest changes built here (Competitor Tribunal synthesis, DBOS/Stagehand/Zod stack, and <strong>TypeSafe AI <code>jev-latest</code> System One Confidence Gate</strong> in <code>server.ts</code>) live in this AI Studio workspace until you push them.
                   </li>
                   <li>
-                    In <strong>Antigravity</strong>, press <code>Ctrl+Shift+P</code> (or <code>Cmd+Shift+P</code>) &rarr; <strong>Git: Clone</strong> and paste your GitHub repository URL.
+                    <strong>How to push to GitHub right now:</strong> Click the <strong>GitHub icon (Save to GitHub)</strong> in the <strong>top-right toolbar of Google AI Studio</strong>, select <code>apex-ronin/DecaFleet-OS</code>, and commit to your branch (or <code>main</code>).
+                  </li>
+                  <li>
+                    <strong>How to pull into Antigravity:</strong> Once saved to GitHub, open the desktop <strong>Antigravity</strong> terminal (<code>Ctrl+`</code>) and run <code>git pull</code> (or clone fresh below).
                   </li>
                 </ol>
               </div>
@@ -297,7 +302,7 @@ ${selectedHandbook.botFleet
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Once opened inside Antigravity, run in the terminal:</span>
+                    <span>Once synced or unzipped inside Antigravity, run in the terminal:</span>
                   </span>
                   <button
                     onClick={handleCopySetupCmd}
@@ -308,10 +313,14 @@ ${selectedHandbook.botFleet
                   </button>
                 </div>
                 <pre className="text-emerald-400 overflow-x-auto">
-{`# Install packages and launch local dev server on http://localhost:3000
+{`# 1. Copy environment template and add your TypeSafe AI (jev-latest) key
+cp .env.example .env
+# Edit .env -> TYPESAFE_API_KEY="ts_live_..." (from https://console.typesafe.ai/home)
+
+# 2. Install packages and launch full-stack Express + Vite server on http://localhost:3000
 npm install && npm run dev
 
-# Verify the pure-logic unit test suite
+# 3. Verify the pure-logic unit test suite
 node --test src/utils/calculator.test.ts`}
                 </pre>
               </div>

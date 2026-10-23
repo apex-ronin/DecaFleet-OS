@@ -1,49 +1,53 @@
 import { CandidateIdea } from '../types/index.ts';
 
 export const CANDIDATE_IDEAS: CandidateIdea[] = [
-  // PROVEN MODELS (12)
+  // PROVEN MODELS (12) — Synthesized from GPT_Buiness, Ara-Grok & Claude Rebuild
   {
     id: 'p1',
     code: 'P1',
-    name: 'Programmatic Local Citation & Directory Sync',
+    name: 'Trade Map Desk & Local Citation Sync (Grok + NAP-Shield)',
     category: 'proven',
-    scores: { spd: 5, cap: 5, mar: 5, ceil: 4, def: 3, fit: 5, wtp: 5 },
-    total: 32,
+    scores: { spd: 5, cap: 5, mar: 5, ceil: 4, def: 4, fit: 5, wtp: 5 },
+    total: 33,
     selected: true,
     rank: 1,
-    statusRationale: 'Selected (#1 Proven). Rapid day-by-day cash conversion, massive manual form friction that bots eliminate effortlessly, verified budget line in Local SEO.'
+    statusRationale:
+      'Selected (#1 Proven — Stage 2 Cross-Sell). Directly cross-sells at $449/mo to the exact same General Contractors acquired via Grok’s Sub Radar. Eliminates manual directory form friction across 50+ trade registries.'
   },
   {
     id: 'p2',
     code: 'P2',
-    name: 'B2B Job Board Lead-Scraping & Cold Outbound Ops',
+    name: 'Catalog Exception Desk & B2B Signal Ops (GPT P-B + IntentPipe)',
     category: 'proven',
-    scores: { spd: 5, cap: 4, mar: 5, ceil: 4, def: 3, fit: 5, wtp: 5 },
-    total: 31,
+    scores: { spd: 5, cap: 5, mar: 5, ceil: 4, def: 4, fit: 5, wtp: 4 },
+    total: 32,
     selected: true,
     rank: 2,
-    statusRationale: 'Selected (#2 Proven). Immediate willingness to pay from B2B founders starved for pipeline; live hiring intent converts at 4x-8x static databases.'
+    statusRationale:
+      'Selected (#2 Proven — GPT Best-of-Class P-B). Corporate e-commerce & B2B teams pay $1,000–$2,200/mo to resolve daily merchant feed exceptions and hiring-intent signals using exported CSVs ("No-Login Default").'
   },
   {
     id: 'p3',
     code: 'P3',
-    name: 'Competitor Ad Scraping & Creative Intelligence Feed',
+    name: 'No-Login Funnel, Link-Tree & Ad Creative Metadata Desk (Claude + AdWatch)',
     category: 'proven',
-    scores: { spd: 4, cap: 5, mar: 5, ceil: 4, def: 3, fit: 5, wtp: 4 },
-    total: 30,
+    scores: { spd: 5, cap: 5, mar: 5, ceil: 4, def: 3, fit: 5, wtp: 4 },
+    total: 31,
     selected: true,
     rank: 3,
-    statusRationale: 'Selected (#3 Proven). Direct-to-Consumer brands burn millions on creative fatigue; browser bots download dynamic ad libraries and transcribe video hooks at scale.'
+    statusRationale:
+      'Selected (#3 Proven — Claude Rebuild Synthesis). Enforces the strict "No-Login Default" and "Metadata-Only" rules: audits public funnel uptime, link-trees, and Meta/TikTok Ad Libraries with a fast $75–$149 Day-5 deposit wedge.'
   },
   {
     id: 'p4',
     code: 'P4',
-    name: 'E-commerce Price Intelligence / MAP Breach Alerts',
+    name: 'Shelf Copy & Shelf Price — Amazon Price Memo Scraper (Grok Parked)',
     category: 'proven',
-    scores: { spd: 4, cap: 4, mar: 4, ceil: 4, def: 3, fit: 5, wtp: 4 },
-    total: 28,
+    scores: { spd: 4, cap: 4, mar: 4, ceil: 4, def: 2, fit: 3, wtp: 4 },
+    total: 25,
     selected: false,
-    statusRationale: 'Killed: Slower enterprise sales cycles (>45 days) and long vendor procurement questionnaires.'
+    statusRationale:
+      'Killed / Parked (Ara-Grok Tribunal Rule): Aggressive scraping of Amazon product pages gets the single shared machine IP blocked and shuts down all 10 bots simultaneously.'
   },
   {
     id: 'p5',
@@ -53,7 +57,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 4, cap: 4, mar: 4, ceil: 3, def: 2, fit: 4, wtp: 4 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Decorative bot utility; basic API webhooks (Descript/Opus) suffice without browser agent fleets.'
+    statusRationale:
+      'Killed: Decorative bot utility; basic API webhooks (Descript/Opus) suffice without browser agent fleets.'
   },
   {
     id: 'p6',
@@ -63,7 +68,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 4, cap: 5, mar: 4, ceil: 3, def: 2, fit: 3, wtp: 4 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: High human subjective voice review required; does not decouple revenue from operator hours.'
+    statusRationale:
+      'Killed: High human subjective voice review required; does not decouple revenue from operator hours.'
   },
   {
     id: 'p7',
@@ -73,17 +79,19 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 4, cap: 4, mar: 4, ceil: 4, def: 2, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: High cold-call realtor fatigue; heavy state-level licensing and MLS data access restrictions.'
+    statusRationale:
+      'Killed: High cold-call realtor fatigue; heavy state-level licensing and MLS data access restrictions.'
   },
   {
     id: 'p8',
     code: 'P8',
-    name: 'Amazon Seller Review Dispute & Case Management',
+    name: 'Direct-Login OnlyFans / Adult Creator 24/7 DM Chatting (Gemini/Venice DQ)',
     category: 'proven',
-    scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 3, fit: 4, wtp: 3 },
-    total: 25,
+    scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 1, fit: 2, wtp: 4 },
+    total: 22,
     selected: false,
-    statusRationale: 'Killed: Aggressive Amazon seller account suspension risks when logging in via third-party browser profiles.'
+    statusRationale:
+      'Killed by Tribunal (Fatal ToS & Banking Trap): Direct creator logins trigger instant 2FA/IP fraud locks, Wave/Stripe merchant bans, and an impossible contradiction between 24/7 overnight DMs and 100% human approval gates.'
   },
   {
     id: 'p9',
@@ -93,17 +101,19 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 4, cap: 5, mar: 4, ceil: 3, def: 2, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Low-margin platform churn; clients on gig platforms have low retention and low price tolerance.'
+    statusRationale:
+      'Killed: Low-margin platform churn; clients on gig platforms have low retention and low price tolerance.'
   },
   {
     id: 'p10',
     code: 'P10',
-    name: 'Local Google Business Profile Review & Audit Monitor',
+    name: 'Generic SMB Meta/Google Ads Manager Agency (GitHub AI DQ)',
     category: 'proven',
-    scores: { spd: 4, cap: 5, mar: 4, ceil: 3, def: 2, fit: 4, wtp: 4 },
-    total: 26,
+    scores: { spd: 3, cap: 4, mar: 4, ceil: 3, def: 2, fit: 2, wtp: 3 },
+    total: 21,
     selected: false,
-    statusRationale: 'Subsumed into P1: NAP-Shield incorporates GBP review and post monitoring directly as expansion modules.'
+    statusRationale:
+      'Killed by Tribunal (GitHub AI 54/100 DQ): Logging 10 bots into multiple client ad accounts on one shared machine triggers immediate multi-account fingerprinting bans.'
   },
   {
     id: 'p11',
@@ -113,62 +123,68 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 4, mar: 4, ceil: 3, def: 2, fit: 4, wtp: 3 },
     total: 23,
     selected: false,
-    statusRationale: 'Killed: Diminishing conversion rates industry-wide (<0.5% response) and high spam filter burn rates.'
+    statusRationale:
+      'Killed: Diminishing conversion rates industry-wide (<0.5% response) and high spam filter burn rates.'
   },
   {
     id: 'p12',
     code: 'P12',
-    name: 'SaaS Churn Rescue & Downgrade Re-engagement Scraper',
+    name: 'SaaS Churn Rescue via Internal Production DB Hooks',
     category: 'proven',
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 2, fit: 3, wtp: 3 },
     total: 23,
     selected: false,
-    statusRationale: 'Killed: Demands deep internal production database and Stripe API integration, creating high client security friction.'
+    statusRationale:
+      'Killed: Demands deep internal production database and Stripe API integration, creating high client security friction.'
   },
 
-  // CONTRARIAN MODELS (12)
+  // CONTRARIAN MODELS (12) — Synthesized from Ara-Grok, GPT_Buiness & DecaFleet
   {
     id: 'c1',
     code: 'C1',
-    name: 'RFP/Subcontractor Auto-Desk for Local Gov Portals',
+    name: 'Sub Radar — GC Subcontractor License, Bond & Workers-Comp Monitor (Ara-Grok #1)',
     category: 'contrarian',
-    scores: { spd: 4, cap: 5, mar: 5, ceil: 5, def: 4, fit: 5, wtp: 5 },
-    total: 33,
+    scores: { spd: 5, cap: 5, mar: 5, ceil: 5, def: 4, fit: 5, wtp: 5 },
+    total: 34,
     selected: true,
     rank: 1,
-    statusRationale: 'Selected (#1 Contrarian). Huge non-commoditized blue ocean; unifies thousands of 20-year-old ASP.NET county portals where trade contractors make 50% margins.'
+    statusRationale:
+      'Selected (#1 Contrarian & Overall Most Likely to Succeed — 95/100). Queries 100% public state licensing boards (CSLB, TDLR, DBPR). Zero client credentials, zero 3rd-party logins, zero ban risk. $149 Audit -> $399/mo retainer.'
   },
   {
     id: 'c2',
     code: 'C2',
-    name: 'Stolen Brand Traffic & Affiliate Hijack Recovery Engine',
+    name: 'Fleet Collision Lab & Zero-Day Brand Defense QA (GPT C-A + TrafficReclaim)',
     category: 'contrarian',
-    scores: { spd: 4, cap: 5, mar: 5, ceil: 5, def: 4, fit: 5, wtp: 4 },
-    total: 32,
+    scores: { spd: 4, cap: 5, mar: 5, ceil: 5, def: 5, fit: 5, wtp: 4 },
+    total: 33,
     selected: true,
     rank: 2,
-    statusRationale: 'Selected (#2 Contrarian). Exploits day-parted/geo-cloaked zero-day trademark bidding; solves a massive multi-thousand dollar profit leak for enterprise DTC brands.'
+    statusRationale:
+      'Selected (#2 Contrarian — GPT Best-of-Class C-A Synthesis). Uses the 10-bot cluster to run multi-agent browser collision QA, staging regression tests, and night-shift SERP hijack clawbacks at $1,800–$3,500/mo.'
   },
   {
     id: 'c3',
     code: 'C3',
-    name: 'Niche SaaS Churn Intel via Deep Review Audit Traps',
+    name: 'Seat Sniper & Municipal Subcontract RFP Auto-Desk (Grok + GovDesk)',
     category: 'contrarian',
-    scores: { spd: 4, cap: 5, mar: 5, ceil: 5, def: 4, fit: 4, wtp: 4 },
-    total: 31,
+    scores: { spd: 4, cap: 5, mar: 5, ceil: 5, def: 4, fit: 5, wtp: 4 },
+    total: 32,
     selected: true,
     rank: 3,
-    statusRationale: 'Selected (#3 Contrarian). Shifts B2B sales from static positive hiring intent to negative competitor dissatisfaction, arming challenger SaaS SDRs with instant displacement battlecards.'
+    statusRationale:
+      'Selected (#3 Contrarian — Grok Seat Sniper + GovDesk). Monitors public municipal portals for cancelled inspection slots, trade exam seats ($400/mo), and <$50k county subcontract RFPs ($1,400/mo) with zero anti-bot friction.'
   },
   {
     id: 'c4',
     code: 'C4',
-    name: 'Bureaucracy Clearance & Commercial Permit Expediting',
+    name: 'Parcel Watch — County Property Tax Delinquency Reseller (Grok Kill)',
     category: 'contrarian',
-    scores: { spd: 3, cap: 4, mar: 4, ceil: 5, def: 4, fit: 5, wtp: 4 },
-    total: 29,
+    scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 2, fit: 4, wtp: 3 },
+    total: 24,
     selected: false,
-    statusRationale: 'Killed: High regional in-person variances; many county clerks still require physical blueprints over the counter.'
+    statusRationale:
+      'Killed (Ara-Grok Tribunal Rule): Counties such as Napa County explicitly prohibit the commercial resale of public property tax assessment data under local ordinance.'
   },
   {
     id: 'c5',
@@ -178,7 +194,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 3, mar: 4, ceil: 4, def: 3, fit: 4, wtp: 3 },
     total: 24,
     selected: false,
-    statusRationale: 'Killed: High ban rate on non-public Slack/Discord accounts; violates community platform terms.'
+    statusRationale:
+      'Killed: High ban rate on non-public Slack/Discord accounts; violates community platform terms.'
   },
   {
     id: 'c6',
@@ -188,7 +205,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 4, fit: 4, wtp: 3 },
     total: 26,
     selected: false,
-    statusRationale: 'Killed: Requires enterprise legal counsel NDA redlines before accessing Ariba/Coupa systems.'
+    statusRationale:
+      'Killed: Requires enterprise legal counsel NDA redlines before accessing Ariba/Coupa systems.'
   },
   {
     id: 'c7',
@@ -198,7 +216,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 3, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Meta Business Manager token expiration fragility and influencer creator account churn.'
+    statusRationale:
+      'Killed: Meta Business Manager token expiration fragility and influencer creator account churn.'
   },
   {
     id: 'c8',
@@ -208,7 +227,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 3, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Franchise headquarters sales cycle exceeds 90 days, breaking the 7-day revenue mandate.'
+    statusRationale:
+      'Killed: Franchise headquarters sales cycle exceeds 90 days, breaking the 7-day revenue mandate.'
   },
   {
     id: 'c9',
@@ -218,17 +238,19 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 3, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Lumpy event seasonality; trade show calendars create feast-or-famine monthly revenue.'
+    statusRationale:
+      'Killed: Lumpy event seasonality; trade show calendars create feast-or-famine monthly revenue.'
   },
   {
     id: 'c10',
     code: 'C10',
-    name: 'Construction Mechanics Lien Tracking & Alert Engine',
+    name: 'Construction Mechanics Lien Escrow Settlement Filing',
     category: 'contrarian',
     scores: { spd: 3, cap: 4, mar: 4, ceil: 4, def: 4, fit: 4, wtp: 3 },
     total: 26,
     selected: false,
-    statusRationale: 'Killed: Slower legal escrow cycles; title and escrow attorneys take 60-90 days to close settlements.'
+    statusRationale:
+      'Killed: Slower legal escrow cycles; statutory lien recording borders on unauthorized practice of law (UPL) unlike Sub Radar’s public license verification.'
   },
   {
     id: 'c11',
@@ -238,7 +260,8 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 2, cap: 3, mar: 4, ceil: 5, def: 4, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: PTO examination queue takes 6-9 months; completely incompatible with 7-day cash mandate.'
+    statusRationale:
+      'Killed: USPTO examination queue takes 6-9 months; completely incompatible with 7-day cash mandate.'
   },
   {
     id: 'c12',
@@ -248,6 +271,7 @@ export const CANDIDATE_IDEAS: CandidateIdea[] = [
     scores: { spd: 2, cap: 3, mar: 4, ceil: 5, def: 4, fit: 4, wtp: 3 },
     total: 25,
     selected: false,
-    statusRationale: 'Killed: Strict HIPAA liability and institutional review board (IRB) compliance barriers.'
+    statusRationale:
+      'Killed: Strict HIPAA liability and institutional review board (IRB) compliance barriers.'
   }
 ];

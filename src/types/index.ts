@@ -157,14 +157,72 @@ export interface SimulatedLog {
   artifactUrl?: string;
 }
 
+export interface SystemOneTelemetry {
+  model: string;
+  atomicAnswers: {
+    routing_intent: {
+      type: 'choice';
+      choice: 'auto_dispatch' | 'co_sign_batch' | 'escalate_human' | 'reject_malformed';
+      confidence: number;
+      probabilities: Record<string, number>;
+    };
+    non_delegable_boundary: { type: 'noul'; noul: number };
+    primary_evidence_verified: { type: 'noul'; noul: number };
+    zero_login_compliant: { type: 'noul'; noul: number };
+    payload_checksum_valid: { type: 'noul'; noul: number };
+    blast_radius: {
+      type: 'score';
+      score: number;
+      confidence: number;
+      probabilities: Record<string, number>;
+    };
+  };
+  compositeLiabilityRisk: number;
+  gatingTriggered: {
+    isGated: boolean;
+    gateReason: string;
+    policyThresholdApplied: string;
+  };
+}
+
+export interface JevAiVerdict {
+  itemId: string;
+  tier: 'TIER_1_AUTO_DISPATCH' | 'TIER_2_CO_SIGN' | 'TIER_3_HARD_HUMAN_LOCK';
+  decision: 'APPROVE' | 'REJECT' | 'ESCALATE_TO_HUMAN';
+  confidenceScore: number;
+  riskScore: number;
+  constitutionalChecks: {
+    rule: string;
+    passed: boolean;
+    detail: string;
+  }[];
+  rationale: string;
+  recommendedAction: string;
+  timeSavedMinutes: number;
+  evaluatedBy: string;
+  evaluatedAt: string;
+  systemOne?: SystemOneTelemetry;
+}
+
 export interface ApprovalItem {
   id: string;
   businessId: string;
   botName: string;
   title: string;
   summary: string;
-  artifactType: 'sms_verification' | 'email_draft' | 'bid_package' | 'legal_dispute' | 'review_response' | 'lead_batch';
+  artifactType:
+    | 'sms_verification'
+    | 'email_draft'
+    | 'bid_package'
+    | 'legal_dispute'
+    | 'review_response'
+    | 'lead_batch'
+    | 'compliance_alert'
+    | 'catalog_patch'
+    | 'collision_trace'
+    | 'slot_hold';
   dataPayload: Record<string, any>;
   timestamp: string;
   status: 'pending' | 'approved' | 'rejected';
+  jevAiVerdict?: JevAiVerdict;
 }

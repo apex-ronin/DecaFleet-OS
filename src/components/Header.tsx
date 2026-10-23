@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, ShieldAlert, BookOpen, BarChart3, Sliders, GitPullRequest, Download } from 'lucide-react';
+import { Bot, ShieldAlert, BookOpen, BarChart3, Sliders, GitPullRequest, Download, Scale } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: string;
@@ -15,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onExportAll
 }) => {
   const navItems = [
+    { id: 'tribunal', label: 'Tribunal Audit', icon: Scale },
     { id: 'handbooks', label: '6 Handbooks', icon: BookOpen },
     { id: 'fleet', label: '10-Bot Console', icon: Bot },
     { 
@@ -24,14 +25,14 @@ export const Header: React.FC<HeaderProps> = ({
       highlight: pendingApprovalsCount > 0
     },
     { id: 'economics', label: 'Economics & Capacity', icon: Sliders },
-    { id: 'matrix', label: '12+12 Scoring Matrix', icon: BarChart3 },
-    { id: 'portfolio', label: 'Portfolio Roadmap', icon: GitPullRequest },
+    { id: 'matrix', label: '12+12 Matrix', icon: BarChart3 },
+    { id: 'portfolio', label: '4-Stage Roadmap', icon: GitPullRequest },
   ];
 
   return (
     <header className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800 text-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-8 h-16">
+        <div className="flex items-center justify-between gap-6 h-16">
           {/* Zone 1: Wordmark */}
           <div className="flex items-center gap-3 shrink-0">
             <button
@@ -42,13 +43,13 @@ export const Header: React.FC<HeaderProps> = ({
                 DecaFleet OS
               </span>
               <span className="text-xs text-slate-400 block -mt-0.5">
-                10-Bot Autonomous Enterprise Platform
+                Tri-Championship Agent Enterprise
               </span>
             </button>
           </div>
 
           {/* Zone 2: Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -56,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`px-3 py-1.5 text-xs lg:text-sm font-medium rounded-md transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? 'bg-slate-800 text-white shadow-xs'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
