@@ -7,7 +7,8 @@ import {
   calculateBrowserMinuteBudget,
   calculateHumanHours,
   computeTotalScore,
-  evaluateExpansionGate
+  evaluateExpansionGate,
+  computeFleetHealthSummary
 } from './calculator.ts';
 
 test('calculateUnitEconomics computes revenue, costs, and gross margin accurately', () => {
@@ -112,3 +113,45 @@ test('evaluateExpansionGate blocks premature Day-3 expansion and passes when Tri
   assert.equal(ready.blockers.length, 0);
   assert.equal(ready.projectedHours, 17);
 });
+
+test('computeFleetHealthSummary aggregates 10-bot uptime, lanes, and API health status', () => {
+  const bots = Array.from({ length: 10 }, (_, idx) => ({
+    botId: `bot-${String(idx + 1).padStart(2, '0')}`,
+    lane: idx + 1,
+    healthState: 'HEALTHY' as const,
+    uptimePercent: 99.9,
+    wakeGateBypassPercent: 88.0,
+    memoryMb: 320
+  }));
+
+  const apis = [
+    { serviceId: 'typesafe-jev', status: 'OPERATIONAL' as const, latencyMs: 42, uptimePercent: 99.99 },
+    { serviceId: 'litellm-router', status: 'OPERATIONAL' as const, latencyMs: 18, uptimePercent: 99.98 },
+    { serviceId: 'stagehand-cdp', status: 'OPERATIONAL' as const, latencyMs: 11, uptimePercent: 99.95 },
+    { serviceId: 'dbos-postgres', status: 'OPERATIONAL' as const, latencyMs: 7, uptimePercent: 99.99 },
+    { serviceId: 'public-registries', status: 'OPERATIONAL' as const, latencyMs: 162, uptimePercent: 99.85 }
+  ];
+
+  const optimal = computeFleetHealthSummary(bots, apis);
+  assert.equal(optimal.overallStatus, 'OPTIMAL');
+  assert.equal(optimal.totalBots, 10);
+  assert.equal(optimal.healthyBots, 10);
+  assert.equal(optimal.degradedBots, 0);
+  assert.equal(optimal.activeWorkerLanes, 8);
+  assert.equal(optimal.reserveLanesReady, 2);
+  assert.equal(optimal.avgUptimePercent, 99.9);
+  assert.equal(optimal.avgWakeGateBypassPercent, 88);
+  assert.equal(optimal.operationalApis, 5);
+  assert.equal(optimal.avgApiLatencyMs, 48);
+
+  // Degrade 1 bot on lane 3 -> DEGRADED overall status and 7 active worker lanes
+  const withDegradedBot = bots.map((b, i) =>
+    i === 2 ? { ...b, healthState: 'DEGRADED' as const, uptimePercent: 96.5 } : b
+  );
+  const degradedSummary = computeFleetHealthSummary(withDegradedBot, apis);
+  assert.equal(degradedSummary.overallStatus, 'DEGRADED');
+  assert.equal(degradedSummary.healthyBots, 9);
+  assert.equal(degradedSummary.degradedBots, 1);
+  assert.equal(degradedSummary.activeWorkerLanes, 7);
+});
+

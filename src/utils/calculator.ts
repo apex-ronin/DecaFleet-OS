@@ -166,3 +166,81 @@ export function evaluateExpansionGate(input: ExpansionGateInput) {
     recommendedWaitDays: blockers.length === 0 ? 0 : Math.max(7, (2 - input.completedDeliveryCycles) * 7)
   };
 }
+
+export interface BotHealthMetricInput {
+  botId: string;
+  lane: number; // 1..10 (1..8 active worker lanes, 9..10 reserve/QA lanes)
+  healthState: 'HEALTHY' | 'HEALING' | 'DEGRADED' | 'OFFLINE';
+  uptimePercent: number;
+  wakeGateBypassPercent: number;
+  memoryMb: number;
+}
+
+export interface ApiHealthMetricInput {
+  serviceId: string;
+  status: 'OPERATIONAL' | 'DEGRADED' | 'OUTAGE';
+  latencyMs: number;
+  uptimePercent: number;
+}
+
+/**
+ * Computes aggregate real-time health metrics across all 10 persistent browser agents
+ * and upstream API dependencies.
+ */
+export function computeFleetHealthSummary(
+  bots: BotHealthMetricInput[],
+  apis: ApiHealthMetricInput[]
+) {
+  const totalBots = bots.length;
+  const healthyBots = bots.filter((b) => b.healthState === 'HEALTHY' || b.healthState === 'HEALING').length;
+  const degradedBots = bots.filter((b) => b.healthState === 'DEGRADED' || b.healthState === 'OFFLINE').length;
+
+  const activeWorkerLanes = bots.filter(
+    (b) => b.lane <= 8 && (b.healthState === 'HEALTHY' || b.healthState === 'HEALING')
+  ).length;
+  const reserveLanesReady = bots.filter(
+    (b) => b.lane >= 9 && b.healthState === 'HEALTHY'
+  ).length;
+
+  const avgUptimePercent =
+    totalBots > 0
+      ? Number((bots.reduce((acc, b) => acc + b.uptimePercent, 0) / totalBots).toFixed(2))
+      : 0;
+
+  const avgWakeGateBypassPercent =
+    totalBots > 0
+      ? Number((bots.reduce((acc, b) => acc + b.wakeGateBypassPercent, 0) / totalBots).toFixed(1))
+      : 0;
+
+  const totalMemoryMb = bots.reduce((acc, b) => acc + b.memoryMb, 0);
+
+  const totalApis = apis.length;
+  const operationalApis = apis.filter((a) => a.status === 'OPERATIONAL').length;
+  const avgApiLatencyMs =
+    totalApis > 0
+      ? Math.round(apis.reduce((acc, a) => acc + a.latencyMs, 0) / totalApis)
+      : 0;
+
+  let overallStatus: 'OPTIMAL' | 'DEGRADED' | 'CRITICAL' = 'OPTIMAL';
+  if (degradedBots >= 3 || apis.some((a) => a.status === 'OUTAGE')) {
+    overallStatus = 'CRITICAL';
+  } else if (degradedBots > 0 || operationalApis < totalApis) {
+    overallStatus = 'DEGRADED';
+  }
+
+  return {
+    overallStatus,
+    totalBots,
+    healthyBots,
+    degradedBots,
+    activeWorkerLanes,
+    reserveLanesReady,
+    avgUptimePercent,
+    avgWakeGateBypassPercent,
+    totalMemoryMb,
+    totalApis,
+    operationalApis,
+    avgApiLatencyMs
+  };
+}
+

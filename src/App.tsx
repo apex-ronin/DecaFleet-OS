@@ -8,6 +8,7 @@ import { CandidateMatrixView } from './components/CandidateMatrixView.tsx';
 import { PortfolioRoadmapView } from './components/PortfolioRoadmapView.tsx';
 import { TribunalAuditView } from './components/TribunalAuditView.tsx';
 import { AntigravityExportModal } from './components/AntigravityExportModal.tsx';
+import { BotHealthWidget } from './components/BotHealthWidget.tsx';
 import { BUSINESS_HANDBOOKS } from './data/handbooks.ts';
 import { CANDIDATE_IDEAS } from './data/candidates.ts';
 import { TRIBUNAL_CONTENDERS } from './data/tribunal.ts';
@@ -17,6 +18,18 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('tribunal');
   const [selectedBusinessId, setSelectedBusinessId] = useState<string>('c1'); // Default to C1 (Grok's Sub Radar - Stage 1 Winner)
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
+  const [isHealthSidebarOpen, setIsHealthSidebarOpen] = useState<boolean>(false);
+  const [botHealthSummary, setBotHealthSummary] = useState<{
+    healthyBots: number;
+    totalBots: number;
+    avgUptimePercent: number;
+    overallStatus: 'OPTIMAL' | 'DEGRADED' | 'CRITICAL';
+  }>({
+    healthyBots: 10,
+    totalBots: 10,
+    avgUptimePercent: 99.94,
+    overallStatus: 'OPTIMAL'
+  });
 
   // Seed sample initial approval items that demonstrate the human boundary across the Tri-Championship models
   const [approvalItems, setApprovalItems] = useState<ApprovalItem[]>([
@@ -212,6 +225,23 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
         setActiveTab={setActiveTab}
         pendingApprovalsCount={pendingCount}
         onExportAll={() => setIsExportModalOpen(true)}
+        isHealthSidebarOpen={isHealthSidebarOpen}
+        onToggleHealthSidebar={() => setIsHealthSidebarOpen((prev) => !prev)}
+        botHealthSummary={botHealthSummary}
+      />
+
+      {/* Persistent Right-Hand Bot Health Sidebar Overlay (accessible from any tab) */}
+      <BotHealthWidget
+        mode="sidebar"
+        selectedBusinessId={selectedBusinessId}
+        onSelectBusiness={setSelectedBusinessId}
+        isSidebarOpen={isHealthSidebarOpen}
+        onCloseSidebar={() => setIsHealthSidebarOpen(false)}
+        onExpandToTab={() => {
+          setIsHealthSidebarOpen(false);
+          setActiveTab('health');
+        }}
+        onSummaryChange={setBotHealthSummary}
       />
 
       {/* Antigravity & Blueprint Export Modal */}
@@ -244,6 +274,16 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
             selectedBusinessId={selectedBusinessId}
             onSelectBusiness={setSelectedBusinessId}
             onAddApprovalItem={handleAddApprovalItem}
+          />
+        )}
+
+        {activeTab === 'health' && (
+          <BotHealthWidget
+            mode="tab"
+            selectedBusinessId={selectedBusinessId}
+            onSelectBusiness={setSelectedBusinessId}
+            onOpenSidebar={() => setIsHealthSidebarOpen(true)}
+            onSummaryChange={setBotHealthSummary}
           />
         )}
 
