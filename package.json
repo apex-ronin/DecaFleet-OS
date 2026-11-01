@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test": "tsx --test src/utils/calculator.test.ts",
+    "test": "tsx --test src/utils/*.test.ts",
     "audit:sub-radar": "tsx scripts/run_sub_radar_day1_audit.ts",
     "audit:master-plan": "tsx scripts/run_master_plan_jev_audit.ts"
   },
