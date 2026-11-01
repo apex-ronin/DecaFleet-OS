@@ -1,8 +1,22 @@
+# Dependencies
 node_modules/
+
+# Build & Release outputs
 build/
 dist/
 coverage/
-.DS_Store
-*.log
+*.tsbuildinfo
+server.js
+
+# Environment & Secrets (Zero-Credential Hygiene)
 .env*
 !.env.example
+
+# AI Studio / Ephemeral Agent Scratch Artifacts
+.aistudio/
+
+# Logs & OS Metadata
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

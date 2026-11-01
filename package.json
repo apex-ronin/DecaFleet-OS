@@ -1,7 +1,8 @@
 {
-  "name": "react-example",
+  "name": "decafleet-os",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Sovereign 10-Bot Operational Execution Platform & Jev-AI (jev-latest) System One Production Gate",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
@@ -9,7 +10,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "tsx --test src/utils/calculator.test.ts",
+    "audit:sub-radar": "tsx scripts/run_sub_radar_day1_audit.ts",
+    "audit:master-plan": "tsx scripts/run_master_plan_jev_audit.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

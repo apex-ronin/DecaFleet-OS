@@ -2,7 +2,14 @@
 
 **Sovereign 10-Bot Operational Execution Platform & Jev-AI (`jev-latest`) System One Production Gate**
 
+[![Version](https://img.shields.io/badge/version-1.0.0-emerald.svg)](./CHANGELOG.md)
+[![Stage 1](https://img.shields.io/badge/Stage_1_Active-C1_Sub_Radar-blue.svg)](./shared/reports/sub_radar/PKT-C1-20261101-001_40_Sub_Liability_Audit.md)
+[![Jev-AI Gate](https://img.shields.io/badge/System_One_Gate-jev--latest-purple.svg)](./SECURITY.md)
+[![Zero-Login](https://img.shields.io/badge/Security-Zero_Credential_%2F_No_Login-success.svg)](./SECURITY.md)
+
 `DecaFleet-OS` is the live production execution platform for a **single-workstation, 10-agent commercial service fleet** (`Hermes Agent + Stagehand + LiteLLM + DBOS`) supervised by 1 human operator. It executes a 4-Stage Sovereign Master Plan across **6 zero-credential / no-login B2B service lines**, starting immediately on Day 1 with **Stage 1: `C1 Sub Radar` (General Contractor Subcontractor License, Surety Bond & Workers'-Comp Compliance Monitoring)**.
+
+> 📋 **Release & Commit Notes:** See [`CHANGELOG.md`](./CHANGELOG.md) for the complete `v1.0.0` release notes and commit history, [`CONTRIBUTING.md`](./CONTRIBUTING.md) for Conventional Commit and pre-commit verification standards, and [`SECURITY.md`](./SECURITY.md) for the Zero-Credential & 3-Tier Jev-AI Constitutional Gate policy.
 
 ---
 
@@ -36,7 +43,7 @@ flowchart LR
 2. **Zero-Credential / No-Login Default:**
    - Never stores client passwords, session cookies, or 2FA tokens.
    - Operates strictly on **100% public government sunshine registries** (`CSLB`, `TDLR`, `DBPR`), public ad/funnel URLs, or client-exported CSVs—eliminating third-party account lockouts and IP ban risk.
-3. **Jev-AI (`jev-latest`) System One Confidence Gate (`server.ts`):**
+3. **Jev-AI (`jev-latest`) System One Confidence Gate ([`server.ts`](./server.ts)):**
    - Every outbound artifact is adjudicated in a single parallel pass across **6 atomic probabilistic questions**:
      1. `routing_intent` (`choice`: `auto_dispatch` | `co_sign_batch` | `escalate_human` | `reject_malformed`)
      2. `non_delegable_boundary` (`noul`: tripwire `< 0.30`)
@@ -94,6 +101,10 @@ flowchart LR
 ```text
 DecaFleet-OS/
 ├── server.ts                                      # Express + Vite server, Jev-AI System One Gate & Sub Radar API
+├── CHANGELOG.md                                   # Semantic release & commit notes (v0.2.0 -> v1.0.0)
+├── CONTRIBUTING.md                                # Conventional Commits & pre-commit verification guide
+├── SECURITY.md                                    # Zero-Credential mandate & 3-Tier Jev-AI safety policy
+├── .env.example                                   # Template for TYPESAFE_API_KEY & runtime environment vars
 ├── scripts/
 │   ├── run_sub_radar_day1_audit.ts                # Stage 1 Day 1 40-Sub Registry Scraper, Diff & Packet Runner
 │   └── run_master_plan_jev_audit.ts               # 4-Stage Master Plan Jev-AI Constitutional Audit Runner
@@ -104,48 +115,69 @@ DecaFleet-OS/
 │   └── reports/sub_radar/
 │       └── PKT-C1-20261101-001_40_Sub_Liability_Audit.md  # Deliverable $149 40-Sub Liability Audit Packet
 └── src/
+    ├── App.tsx                                    # Sovereign Execution Command Center root view router
     ├── components/
+    │   ├── Header.tsx                             # Top navigation bar, fleet status & telemetry badges
     │   ├── SubRadarLaunchpadView.tsx              # Stage 1 Launchpad UI, Live 40-Sub Diff Table & Packet Viewer
-    │   ├── FleetConsoleView.tsx                   # 10-Bot Runtime Telemetry & Jev-AI 3-Tier Approval Inbox
+    │   ├── FleetConsoleView.tsx                   # 10-Bot Runtime Telemetry & Lane Allocation Console
+    │   ├── BotHealthWidget.tsx                    # Stagehand Self-Healing & DBOS Step Checkpoint Monitor
+    │   ├── ApprovalGateView.tsx                   # Jev-AI (jev-latest) 3-Tier Constitutional Gate Inbox
     │   ├── HandbookDetailView.tsx                 # Interactive 17-Section Operator Handbook Viewer
-    │   ├── ExecutionPlanView.tsx                  # 90-Day 4-Stage Roadmap & Unit Economics Simulator
-    │   └── PortfolioMatrixView.tsx                # 6-Business Portfolio Comparison Matrix
+    │   ├── PortfolioRoadmapView.tsx               # 90-Day 4-Stage Sovereign Master Plan & Sequencer
+    │   ├── EconomicsModelerView.tsx               # Deterministic Unit Economics & Capacity Simulator
+    │   └── AntigravityExportModal.tsx             # Operator Handbook & Artifact Export Modal
     ├── data/
     │   ├── subRadarRoster.ts                      # 40-Subcontractor CSLB/TDLR/DBPR Roster & Audit Markdown Builder
-    │   ├── handbooks.ts                           # 6 Complete 17-Section Operator Handbooks (C1, P1, P2, P3, C2, C3)
-    │   └── fleet.ts                               # 10-Bot Cluster Definitions & Initial Gate Queue
+    │   └── handbooks.ts                           # 6 Complete 17-Section Operator Handbooks (C1, P1, P2, P3, C2, C3)
+    ├── types/
+    │   └── index.ts                               # Strictly typed interfaces for bots, handbooks, and Jev-AI gate
     └── utils/
-        ├── calculator.ts                          # Unit Economics, Capacity Math & MRR Projection Engine
+        ├── calculator.ts                          # Unit Economics, Capacity Math & Fleet Health Engine
         └── calculator.test.ts                     # Deterministic Unit Tests for Fleet & Financial Math
 ```
 
 ---
 
-## 5. Quick Start, CLI Commands & API Reference
+## 5. Quick Start, Environment Setup & CLI Commands
 
-### Installation & Local Development
+### 1. Environment Configuration
+Copy [`.env.example`](./.env.example) to `.env` (never committed to Git):
+```bash
+cp .env.example .env
+```
+
+| Variable | Default / Example | Purpose |
+| :--- | :--- | :--- |
+| `TYPESAFE_API_KEY` | `""` | Primary API key for TypeSafe AI System One (`JEV_AI_API_KEY` alias also supported). |
+| `TYPESAFE_API_URL` | `https://api.typesafe.ai/v1/systemone` | Jev-AI System One probabilistic evaluation endpoint. |
+| `TYPESAFE_MODEL` | `jev-latest` | System One model identifier used for the 6-question gate. |
+| `GEMINI_API_KEY` | `""` | Optional secondary fallback API key. |
+
+*(Note: When `TYPESAFE_API_KEY` is omitted locally, `server.ts` automatically falls back to its deterministic System One mathematical evaluator so local development and CI tests run offline.)*
+
+### 2. Installation & Local Development
 ```bash
 npm install
 npm run dev
 ```
 Open `http://localhost:3000` to access the **DecaFleet-OS Sovereign Execution Command Center**.
 
-### CLI Operational Scripts
+### 3. CLI Operational & Verification Scripts
 ```bash
 # Execute Day 1 Stage 1 (Sub Radar C1) 40-Subcontractor Scrape, Diff & $149 Audit Packet Generation
-npx tsx scripts/run_sub_radar_day1_audit.ts
+npm run audit:sub-radar
 
 # Run the 4-Stage Master Plan Jev-AI (jev-latest) System One Constitutional Audit
-npx tsx scripts/run_master_plan_jev_audit.ts
+npm run audit:master-plan
 
-# Run Unit Economics & Capacity Math Test Suite
-npx tsx --test src/utils/calculator.test.ts
+# Run Unit Economics & Fleet Capacity Math Test Suite
+npm test
 
-# Run TypeScript Strict Typecheck
+# Run TypeScript Strict Static Typecheck
 npm run lint
 ```
 
-### Express + Jev-AI Backend Endpoints (`server.ts`)
+### 4. Express + Jev-AI Backend Endpoints ([`server.ts`](./server.ts))
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `POST` | `/api/sub-radar/ingest-diff` | Runs `BoardScout-01..04` + `DiffEngine-01..02` across the 40-sub roster, flags state board deltas, updates bot telemetry, and adjudicates all alerts + the \$149 Audit Packet via Jev-AI (`jev-latest`). |
