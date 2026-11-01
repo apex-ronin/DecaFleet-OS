@@ -1,0 +1,1 @@
+Updated test runner configuration during AI Studio iteration to execute src/utils/*.test.ts and simplified .env.example template structure.
