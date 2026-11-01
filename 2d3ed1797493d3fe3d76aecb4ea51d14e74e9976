@@ -1,0 +1,1 @@
+Implemented 10-Bot fleet health monitoring system (BotHealthWidget.tsx, /api/bot-health, /api/bot-health/action) tracking 8 active worker lanes + 2 reserve lanes, DBOS checkpoints, and Stagehand self-healing.
