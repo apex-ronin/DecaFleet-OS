@@ -3,13 +3,14 @@
 **Sovereign 10-Bot Operational Execution Platform & Jev-AI (`jev-latest`) System One Production Gate**
 
 [![Version](https://img.shields.io/badge/version-1.0.0-emerald.svg)](./CHANGELOG.md)
+[![Roadmap](https://img.shields.io/badge/Roadmap-4--Stage_Master_Plan-amber.svg)](./ROADMAP.md)
 [![Stage 1](https://img.shields.io/badge/Stage_1_Active-C1_Sub_Radar-blue.svg)](./shared/reports/sub_radar/PKT-C1-20261101-001_40_Sub_Liability_Audit.md)
 [![Jev-AI Gate](https://img.shields.io/badge/System_One_Gate-jev--latest-purple.svg)](./SECURITY.md)
 [![Zero-Login](https://img.shields.io/badge/Security-Zero_Credential_%2F_No_Login-success.svg)](./SECURITY.md)
 
 `DecaFleet-OS` is the live production execution platform for a **single-workstation, 10-agent commercial service fleet** (`Hermes Agent + Stagehand + LiteLLM + DBOS`) supervised by 1 human operator. It executes a 4-Stage Sovereign Master Plan across **6 zero-credential / no-login B2B service lines**, starting immediately on Day 1 with **Stage 1: `C1 Sub Radar` (General Contractor Subcontractor License, Surety Bond & Workers'-Comp Compliance Monitoring)**.
 
-> 📋 **Release & Commit Notes:** See [`CHANGELOG.md`](./CHANGELOG.md) for the complete `v1.0.0` release notes and commit history, [`CONTRIBUTING.md`](./CONTRIBUTING.md) for Conventional Commit and pre-commit verification standards, and [`SECURITY.md`](./SECURITY.md) for the Zero-Credential & 3-Tier Jev-AI Constitutional Gate policy.
+> 📋 **Project Governance & Roadmap:** See [`ROADMAP.md`](./ROADMAP.md) for the complete 4-Stage operational timeline, gate criteria, and VM multiplexing matrix; [`CHANGELOG.md`](./CHANGELOG.md) for `v1.0.0` release notes and commit history; [`CONTRIBUTING.md`](./CONTRIBUTING.md) for Conventional Commit standards; and [`SECURITY.md`](./SECURITY.md) for Zero-Credential and Jev-AI policies.
 
 ---
 

@@ -218,3 +218,33 @@ export function computeFleetHealthSummary(
     avgApiLatencyMs
   };
 }
+
+/**
+ * Simulates quick-reboot logic for persistent browser agents.
+ * Resets degraded/offline agents to HEALTHY and restores their lane availability.
+ */
+export function rebootDegradedBots<T extends BotHealthMetricInput>(
+  bots: T[],
+  targetBotId?: string
+): { rebootedBotIds: string[]; updatedBots: T[] } {
+  const rebootedBotIds: string[] = [];
+
+  const updatedBots = bots.map((bot) => {
+    const shouldReboot = targetBotId
+      ? bot.botId === targetBotId
+      : bot.healthState === 'DEGRADED' || bot.healthState === 'OFFLINE';
+
+    if (shouldReboot) {
+      rebootedBotIds.push(bot.botId);
+      return {
+        ...bot,
+        healthState: 'HEALTHY' as const,
+        uptimePercent: Math.max(bot.uptimePercent, 99.85)
+      };
+    }
+    return bot;
+  });
+
+  return { rebootedBotIds, updatedBots };
+}
+

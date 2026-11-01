@@ -24,8 +24,12 @@ Release `v1.0.0` completes the surgical separation of **DecaFleet-OS** into a pu
 - **Stage 1 CLI Runner & Physical Data Artifacts (`54d3c4d`):**
   - Added [`scripts/run_sub_radar_day1_audit.ts`](./scripts/run_sub_radar_day1_audit.ts) (`npm run audit:sub-radar`) to execute the Day 1 scrape, diff, and Jev-AI gate audit from the command line.
   - Generated verified physical outputs in [`shared/data/registry_raw.json`](./shared/data/registry_raw.json), [`shared/data/compliance_breaches.json`](./shared/data/compliance_breaches.json), and [`shared/reports/sub_radar/PKT-C1-20261101-001_40_Sub_Liability_Audit.md`](./shared/reports/sub_radar/PKT-C1-20261101-001_40_Sub_Liability_Audit.md).
-- **Repository Governance & Documentation Suite:**
+- **Repository Governance, Roadmap & Documentation Suite:**
+  - Added [`ROADMAP.md`](./ROADMAP.md) detailing the complete 4-Stage operational timeline, gate criteria, and VM multiplexing matrix.
   - Added [`CHANGELOG.md`](./CHANGELOG.md), [`CONTRIBUTING.md`](./CONTRIBUTING.md), and [`SECURITY.md`](./SECURITY.md) enforcing Conventional Commits, Zero-Credential / No-Login boundaries, and pre-commit verification gates.
+- **Persistent Browser Agent Quick-Reboot Recovery:**
+  - Added `rebootDegradedBots()` in [`src/utils/calculator.ts`](./src/utils/calculator.ts) and unit tests in [`src/utils/calculator.test.ts`](./src/utils/calculator.test.ts).
+  - Added `POST /api/bot-health/reboot` and `'quick_reboot'` action support in [`server.ts`](./server.ts), plus targeted and batch Quick-Reboot controls in [`src/components/BotHealthWidget.tsx`](./src/components/BotHealthWidget.tsx).
 
 ### Changed
 - **Surgical Separation from Competition Engine (`de03068`):**

@@ -1,5 +1,5 @@
 {
-  "name": "DecaFleet OS - 10-Bot Enterprise Command & Handbooks",
+  "name": "DecaFleet-OS",
   "description": "Production operational command center and execution platform for running 6 high-margin autonomous businesses powered by 10 persistent cloud browser agents.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

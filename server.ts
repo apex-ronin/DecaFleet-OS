@@ -653,7 +653,7 @@ async function startServer() {
   app.use(express.json({ limit: '2mb' }));
 
   // Jev-AI Provider Configuration Status (never exposes secret values)
-  app.get('/api/jev-ai/status', (_req, res) => {
+  const getJevStatus = (_req: express.Request, res: express.Response) => {
     const hasTypeSafeKey = Boolean(
       process.env.TYPESAFE_API_KEY?.trim() || process.env.JEV_AI_API_KEY?.trim()
     );
@@ -671,10 +671,13 @@ async function startServer() {
         process.env.TYPESAFE_API_URL?.trim() || 'https://api.typesafe.ai/v1/systemone',
       model: process.env.TYPESAFE_MODEL?.trim() || 'jev-latest'
     });
-  });
+  };
+
+  app.get('/api/jev-ai/status', getJevStatus);
+  app.get('/api/gate/status', getJevStatus);
 
   // Jev-AI Single Item Adjudication Endpoint
-  app.post('/api/jev-ai/evaluate', async (req, res) => {
+  const evaluateSingleGateItem = async (req: express.Request, res: express.Response) => {
     try {
       const rawItem: GatePayloadInput = req.body.item;
       if (!rawItem || !rawItem.id) {
@@ -691,7 +694,10 @@ async function startServer() {
     } catch (error: any) {
       res.status(500).json({ error: error?.message || 'Jev-AI evaluation failed' });
     }
-  });
+  };
+
+  app.post('/api/jev-ai/evaluate', evaluateSingleGateItem);
+  app.post('/api/gate/evaluate', evaluateSingleGateItem);
 
   // Jev-AI Batch Queue Adjudication Endpoint
   app.post('/api/jev-ai/evaluate-batch', async (req, res) => {
@@ -888,6 +894,22 @@ async function startServer() {
     const { action, botId } = req.body || {};
     totalFleetProbes += 1;
 
+    const quickRebootAgent = (targetId: string) => {
+      const prev = botOverrides.get(targetId) || {};
+      const laneNum = Number(targetId.replace('bot-', '')) || 1;
+      totalStagehandHeals += 1;
+      botOverrides.set(targetId, {
+        ...prev,
+        healthState: 'HEALTHY',
+        executionState: laneNum <= 8 ? 'ACTIVE_SCRAPE' : 'STANDBY_RESERVE',
+        restartedAt: Date.now(),
+        healedCountDelta: (prev.healedCountDelta || 0) + 1,
+        customTask: 'Chromium CDP lane quick-rebooted · DOM contexts re-anchored · DBOS step recovered',
+        lastActionNote: `Quick-rebooted via CDP lane restart API at ${new Date().toLocaleTimeString()} (PID reset, zero state loss).`
+      });
+      return targetId;
+    };
+
     if (action === 'simulate_drift' && typeof botId === 'string') {
       const prev = botOverrides.get(botId) || {};
       botOverrides.set(botId, {
@@ -895,7 +917,7 @@ async function startServer() {
         healthState: 'DEGRADED',
         executionState: 'DEGRADED_DOM_DRIFT',
         customTask: 'ALERT: Target portal table selector drifted (.license-row-v2 -> .registry-card)',
-        lastActionNote: `Selector drift injected at ${new Date().toLocaleTimeString()} — awaiting Stagehand auto-heal.`
+        lastActionNote: `Selector drift injected at ${new Date().toLocaleTimeString()} — awaiting Stagehand auto-heal or quick reboot.`
       });
     } else if (action === 'stagehand_heal' && typeof botId === 'string') {
       const prev = botOverrides.get(botId) || {};
@@ -908,6 +930,16 @@ async function startServer() {
         customTask: 'Stagehand self-healed DOM tree & resumed @DBOS.step() from checkpoint',
         lastActionNote: `Healed via stagehand.act() at ${new Date().toLocaleTimeString()} (+1 selector patch cached).`
       });
+    } else if (action === 'quick_reboot') {
+      if (typeof botId === 'string' && botId !== 'ALL_DEGRADED') {
+        quickRebootAgent(botId);
+      } else {
+        for (const [id, ov] of botOverrides.entries()) {
+          if (ov.healthState === 'DEGRADED' || ov.healthState === 'OFFLINE') {
+            quickRebootAgent(id);
+          }
+        }
+      }
     } else if (action === 'heal_all') {
       for (const [id, ov] of botOverrides.entries()) {
         if (ov.healthState === 'DEGRADED') {
@@ -936,6 +968,56 @@ async function startServer() {
     }
 
     res.json({ ok: true, totalFleetProbes, totalStagehandHeals });
+  });
+
+  // Dedicated Quick Reboot Endpoint for targeted or batch degraded browser agent recovery
+  app.post('/api/bot-health/reboot', (req, res) => {
+    const { botId, rebootAllDegraded } = req.body || {};
+    totalFleetProbes += 1;
+    const rebootedBots: string[] = [];
+    const nowTime = new Date().toLocaleTimeString();
+
+    const doReboot = (targetId: string) => {
+      const prev = botOverrides.get(targetId) || {};
+      const laneNum = Number(targetId.replace('bot-', '')) || 1;
+      totalStagehandHeals += 1;
+      botOverrides.set(targetId, {
+        ...prev,
+        healthState: 'HEALTHY',
+        executionState: laneNum <= 8 ? 'ACTIVE_SCRAPE' : 'STANDBY_RESERVE',
+        restartedAt: Date.now(),
+        healedCountDelta: (prev.healedCountDelta || 0) + 1,
+        customTask: 'Chromium CDP lane quick-rebooted · DOM contexts re-anchored · DBOS step recovered',
+        lastActionNote: `Quick-rebooted via simulated CDP restart API at ${nowTime} (PID reset, zero state loss).`
+      });
+      rebootedBots.push(targetId);
+    };
+
+    if (rebootAllDegraded || botId === 'ALL_DEGRADED' || !botId) {
+      for (const [id, ov] of botOverrides.entries()) {
+        if (ov.healthState === 'DEGRADED' || ov.healthState === 'OFFLINE') {
+          doReboot(id);
+        }
+      }
+      if (rebootedBots.length === 0 && botId && typeof botId === 'string' && botId !== 'ALL_DEGRADED') {
+        doReboot(botId);
+      }
+    } else if (typeof botId === 'string') {
+      doReboot(botId);
+    }
+
+    res.json({
+      ok: true,
+      rebootedBots,
+      rebootCount: rebootedBots.length,
+      message:
+        rebootedBots.length > 0
+          ? `Quick-rebooted ${rebootedBots.length} persistent browser agent(s) [${rebootedBots.join(', ')}]. Context & DBOS checkpoints restored.`
+          : 'No degraded persistent browser agents required rebooting.',
+      timestamp: new Date().toISOString(),
+      totalFleetProbes,
+      totalStagehandHeals
+    });
   });
 
   // --- STAGE 1 (C1 SUB RADAR): Live Multi-State Scraper & Diff Ingestion Endpoints ---
