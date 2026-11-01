@@ -9,6 +9,11 @@ import {
   SUB_RADAR_AUDIT_PACKET_META,
   generateSubRadarAuditMarkdown
 } from './src/data/subRadarRoster.ts';
+import {
+  CONTENDERS,
+  evaluateContenderWithJev,
+  evaluateCandidatePool
+} from './src/data/competitionTribunal.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -653,7 +658,7 @@ async function startServer() {
   app.use(express.json({ limit: '2mb' }));
 
   // Jev-AI Provider Configuration Status (never exposes secret values)
-  app.get('/api/jev-ai/status', (_req, res) => {
+  const getJevStatus = (_req: express.Request, res: express.Response) => {
     const hasTypeSafeKey = Boolean(
       process.env.TYPESAFE_API_KEY?.trim() || process.env.JEV_AI_API_KEY?.trim()
     );
@@ -671,10 +676,47 @@ async function startServer() {
         process.env.TYPESAFE_API_URL?.trim() || 'https://api.typesafe.ai/v1/systemone',
       model: process.env.TYPESAFE_MODEL?.trim() || 'jev-latest'
     });
+  };
+
+  app.get('/api/jev-ai/status', getJevStatus);
+  app.get('/api/gate/status', getJevStatus);
+
+  // Competition Tribunal & 24 Candidate Jev-AI Audit Endpoints
+  app.get('/api/competition/audit', (_req, res) => {
+    try {
+      const contenders = CONTENDERS.map((c) => evaluateContenderWithJev(c));
+      const candidates = evaluateCandidatePool();
+      res.json({
+        documentId: 'AUDIT-DECAFLEET-2026-10-21-REV2',
+        title: 'DecaFleet-OS: The Competition Tribunal & Forensic Audit',
+        podium: [
+          { place: 1, name: 'GPT_Buiness.md', badge: '🏆 BEST OF CLASS', score: 96 },
+          { place: 2, name: 'Ara - Grok', badge: '🥇 MOST LIKELY TO SUCCEED', score: 95 },
+          { place: 3, name: 'Claude-OF-OUT-USA Rebuilt', badge: '🥈 3RD PLACE', score: 91 },
+          { place: 4, name: 'GPT_AI-Agent-Market-Research', badge: '🎖️ SPECIAL AWARD (Stack)', score: 100 }
+        ],
+        contenders,
+        candidates,
+        summary: {
+          totalContenders: contenders.length,
+          champions: contenders.filter((c) => c.jevDecision === 'CHAMPION').length,
+          disqualified: contenders.filter((c) => c.jevDecision === 'DISQUALIFIED').length,
+          totalCandidates: candidates.length,
+          selected: candidates.filter((c) => c.status === 'SELECTED').length,
+          parked: candidates.filter((c) => c.status === 'PARKED').length,
+          killed: candidates.filter((c) => c.status === 'KILLED').length
+        }
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err?.message || 'Failed to generate competition audit' });
+    }
   });
 
-  // Jev-AI Single Item Adjudication Endpoint
-  app.post('/api/jev-ai/evaluate', async (req, res) => {
+  app.get('/api/competition/candidates', (_req, res) => {
+    res.json({ candidates: evaluateCandidatePool() });
+  });
+
+  const evaluateSingleGateItem = async (req: express.Request, res: express.Response) => {
     try {
       const rawItem: GatePayloadInput = req.body.item;
       if (!rawItem || !rawItem.id) {
@@ -691,7 +733,11 @@ async function startServer() {
     } catch (error: any) {
       res.status(500).json({ error: error?.message || 'Jev-AI evaluation failed' });
     }
-  });
+  };
+
+  // Jev-AI Single Item Adjudication Endpoint
+  app.post('/api/jev-ai/evaluate', evaluateSingleGateItem);
+  app.post('/api/gate/evaluate', evaluateSingleGateItem);
 
   // Jev-AI Batch Queue Adjudication Endpoint
   app.post('/api/jev-ai/evaluate-batch', async (req, res) => {
