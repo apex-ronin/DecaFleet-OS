@@ -244,6 +244,11 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
   const [telemetry, setTelemetry] = useState<FleetHealthPayload>(() => buildFallbackPayload());
   const [isProbing, setIsProbing] = useState(false);
   const [actionBusyBot, setActionBusyBot] = useState<string | null>(null);
+  const [rebootingBotId, setRebootingBotId] = useState<string | null>(null);
+  const [rebootFeedbackMessage, setRebootFeedbackMessage] = useState<{
+    text: string;
+    type: 'success' | 'info' | 'error';
+  } | null>(null);
   const [filterLaneMode, setFilterLaneMode] = useState<'ALL' | 'WORKERS' | 'DEGRADED'>('ALL');
 
   const handbook =
@@ -275,7 +280,7 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
   }, [fetchTelemetry]);
 
   const triggerFleetAction = async (
-    action: 'probe_all' | 'simulate_drift' | 'stagehand_heal' | 'heal_all' | 'restart_session',
+    action: 'probe_all' | 'simulate_drift' | 'stagehand_heal' | 'heal_all' | 'restart_session' | 'quick_reboot',
     botId?: string
   ) => {
     if (botId) {
@@ -293,6 +298,49 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
     } finally {
       setIsProbing(false);
       setActionBusyBot(null);
+    }
+  };
+
+  /**
+   * Quick Reboot handler for targeted or batch degraded persistent browser agents.
+   * Dispatches simulated CDP lane restart to /api/bot-health/reboot.
+   */
+  const triggerQuickReboot = async (botId?: string) => {
+    const target = botId || 'ALL_DEGRADED';
+    setRebootingBotId(target);
+    try {
+      const res = await fetch('/api/bot-health/reboot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          botId: botId || undefined,
+          rebootAllDegraded: !botId || botId === 'ALL_DEGRADED'
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        await fetchTelemetry();
+        setRebootFeedbackMessage({
+          text: data.message || `Quick reboot completed: agent CDP session recycled and restored to ONLINE.`,
+          type: 'success'
+        });
+      } else {
+        const errText = await res.text();
+        setRebootFeedbackMessage({
+          text: `Reboot call returned ${res.status}: ${errText.slice(0, 100)}`,
+          type: 'error'
+        });
+      }
+    } catch (err: any) {
+      setRebootFeedbackMessage({
+        text: `Reboot network error: ${err?.message || 'Check dev server'}`,
+        type: 'error'
+      });
+    } finally {
+      setRebootingBotId(null);
+      setTimeout(() => {
+        setRebootFeedbackMessage(null);
+      }, 6000);
     }
   };
 
@@ -446,8 +494,62 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
           </div>
         </div>
 
+        {/* Feedback / Notification Toast */}
+        {rebootFeedbackMessage && (
+          <div
+            className={`mx-3 mt-2.5 p-2 rounded-lg text-xs flex items-center justify-between gap-2 border transition-all ${
+              rebootFeedbackMessage.type === 'success'
+                ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                : 'bg-rose-50 text-rose-900 border-rose-300'
+            }`}
+          >
+            <div className="flex items-center gap-1.5 min-w-0">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate font-medium">{rebootFeedbackMessage.text}</span>
+            </div>
+            <button
+              onClick={() => setRebootFeedbackMessage(null)}
+              className="text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer text-sm font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        )}
+
+        {/* Degraded Alert Banner with 1-Click Quick Reboot */}
+        {summary.degradedBots > 0 && (
+          <div className="mx-3 mt-2.5 p-2.5 rounded-lg bg-amber-500/10 border border-amber-300 text-slate-900 flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                <AlertTriangle className="w-4 h-4 text-amber-600 animate-pulse shrink-0" />
+                <span>
+                  {summary.degradedBots} Agent{summary.degradedBots > 1 ? 's' : ''} DEGRADED
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200 font-semibold">
+                DOM Drift Alert
+              </span>
+            </div>
+            <p className="text-[11px] text-amber-800 leading-snug">
+              Target portal selector drift detected. Quick reboot re-initializes Chromium CDP socket &amp; resumes from latest DBOS checkpoint.
+            </p>
+            <button
+              onClick={() => triggerQuickReboot()}
+              disabled={rebootingBotId !== null}
+              className="mt-1 w-full py-1.5 px-3 rounded text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <RotateCcw
+                className={`w-3.5 h-3.5 ${rebootingBotId === 'ALL_DEGRADED' ? 'animate-spin' : ''}`}
+              />
+              {rebootingBotId === 'ALL_DEGRADED'
+                ? 'Rebooting CDP Lanes...'
+                : `Quick Reboot ${summary.degradedBots} Degraded Agent${summary.degradedBots > 1 ? 's' : ''}`}
+            </button>
+          </div>
+        )}
+
         {/* Quick Control Bar */}
-        <div className="px-3 py-2 bg-white border-b border-slate-200 flex items-center justify-between gap-2">
+        <div className="px-3 py-2 bg-white border-b border-slate-200 flex items-center justify-between gap-2 mt-1">
           <button
             onClick={() => triggerFleetAction('probe_all')}
             disabled={isProbing}
@@ -458,11 +560,14 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
           </button>
           {summary.degradedBots > 0 ? (
             <button
-              onClick={() => triggerFleetAction('heal_all')}
-              className="py-1.5 px-2.5 rounded text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1 transition-colors cursor-pointer"
+              onClick={() => triggerQuickReboot()}
+              disabled={rebootingBotId !== null}
+              className="py-1.5 px-2.5 rounded text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
             >
-              <Wrench className="w-3.5 h-3.5" />
-              Heal ({summary.degradedBots})
+              <RotateCcw
+                className={`w-3.5 h-3.5 ${rebootingBotId ? 'animate-spin' : ''}`}
+              />
+              Quick Reboot ({summary.degradedBots})
             </button>
           ) : (
             <button
@@ -576,18 +681,31 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
                         DBOS: <strong className="text-slate-700">{bot.dbosCheckpointId}</strong>
                       </span>
                       {isDegraded ? (
-                        <button
-                          onClick={() => triggerFleetAction('stagehand_heal', bot.botId)}
-                          disabled={actionBusyBot === bot.botId}
-                          className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1 cursor-pointer"
-                        >
-                          <Wrench className="w-3 h-3" />
-                          Stagehand Auto-Heal
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => triggerQuickReboot(bot.botId)}
+                            disabled={rebootingBotId === bot.botId}
+                            title="Quick Reboot persistent Chromium agent and restore CDP lane"
+                            className="px-2.5 py-1 rounded text-[11px] font-bold bg-amber-600 hover:bg-amber-500 text-white flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                          >
+                            <RotateCcw
+                              className={`w-3 h-3 ${rebootingBotId === bot.botId ? 'animate-spin' : ''}`}
+                            />
+                            {rebootingBotId === bot.botId ? 'Rebooting...' : 'Quick Reboot'}
+                          </button>
+                          <button
+                            onClick={() => triggerFleetAction('stagehand_heal', bot.botId)}
+                            disabled={actionBusyBot === bot.botId || rebootingBotId === bot.botId}
+                            className="px-2 py-1 rounded text-[10px] font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 flex items-center gap-1 cursor-pointer"
+                          >
+                            <Wrench className="w-3 h-3" />
+                            Heal
+                          </button>
+                        </div>
                       ) : (
                         <button
                           onClick={() => triggerFleetAction('simulate_drift', bot.botId)}
-                          disabled={actionBusyBot === bot.botId}
+                          disabled={actionBusyBot === bot.botId || rebootingBotId !== null}
                           className="px-2 py-0.5 rounded text-[10px] font-medium text-slate-600 hover:text-rose-700 hover:bg-rose-50 border border-slate-200 cursor-pointer"
                         >
                           Inject Drift
@@ -647,13 +765,25 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
             </button>
 
             {summary.degradedBots > 0 ? (
-              <button
-                onClick={() => triggerFleetAction('heal_all')}
-                className="px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Wrench className="w-3.5 h-3.5" />
-                Stagehand Auto-Heal All ({summary.degradedBots})
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => triggerQuickReboot()}
+                  disabled={rebootingBotId !== null}
+                  className="px-3.5 py-2 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                >
+                  <RotateCcw
+                    className={`w-3.5 h-3.5 ${rebootingBotId ? 'animate-spin' : ''}`}
+                  />
+                  Quick Reboot ({summary.degradedBots} Degraded)
+                </button>
+                <button
+                  onClick={() => triggerFleetAction('heal_all')}
+                  className="px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Wrench className="w-3.5 h-3.5" />
+                  Stagehand Auto-Heal All
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => triggerFleetAction('simulate_drift', 'bot-03')}
@@ -986,14 +1116,27 @@ export const BotHealthWidget: React.FC<BotHealthWidgetProps> = ({
 
                   <div className="flex items-center gap-1.5">
                     {isDegraded ? (
-                      <button
-                        onClick={() => triggerFleetAction('stagehand_heal', bot.botId)}
-                        disabled={actionBusyBot === bot.botId}
-                        className="px-2.5 py-1 rounded text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1 transition-colors cursor-pointer"
-                      >
-                        <Wrench className="w-3 h-3" />
-                        Stagehand Auto-Heal
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => triggerQuickReboot(bot.botId)}
+                          disabled={rebootingBotId === bot.botId}
+                          title="Quick Reboot persistent Chromium agent and restore CDP lane"
+                          className="px-2.5 py-1 rounded text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          <RotateCcw
+                            className={`w-3.5 h-3.5 ${rebootingBotId === bot.botId ? 'animate-spin' : ''}`}
+                          />
+                          {rebootingBotId === bot.botId ? 'Rebooting...' : 'Quick Reboot'}
+                        </button>
+                        <button
+                          onClick={() => triggerFleetAction('stagehand_heal', bot.botId)}
+                          disabled={actionBusyBot === bot.botId || rebootingBotId === bot.botId}
+                          className="px-2 py-1 rounded text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1 transition-colors cursor-pointer"
+                        >
+                          <Wrench className="w-3 h-3" />
+                          Auto-Heal
+                        </button>
+                      </div>
                     ) : (
                       <button
                         onClick={() => triggerFleetAction('simulate_drift', bot.botId)}

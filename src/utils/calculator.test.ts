@@ -7,7 +7,8 @@ import {
   calculateBrowserMinuteBudget,
   calculateHumanHours,
   evaluateExpansionGate,
-  computeFleetHealthSummary
+  computeFleetHealthSummary,
+  rebootDegradedBots
 } from './calculator.ts';
 
 test('calculateUnitEconomics computes revenue, costs, and gross margin accurately', () => {
@@ -147,4 +148,37 @@ test('computeFleetHealthSummary aggregates 10-bot uptime, lanes, and API health 
   assert.equal(degradedSummary.healthyBots, 9);
   assert.equal(degradedSummary.degradedBots, 1);
   assert.equal(degradedSummary.activeWorkerLanes, 7);
+});
+
+test('rebootDegradedBots restarts degraded persistent browser agents and restores fleet health', () => {
+  const bots = Array.from({ length: 10 }, (_, idx) => ({
+    botId: `bot-${String(idx + 1).padStart(2, '0')}`,
+    lane: idx + 1,
+    healthState: (idx === 2 || idx === 6 ? 'DEGRADED' : 'HEALTHY') as 'HEALTHY' | 'DEGRADED',
+    uptimePercent: idx === 2 || idx === 6 ? 96.2 : 99.9,
+    wakeGateBypassPercent: 88.0,
+    memoryMb: 320
+  }));
+
+  // 1. Target single specific degraded bot reboot (bot-03)
+  const singleReboot = rebootDegradedBots(bots, 'bot-03');
+  assert.deepEqual(singleReboot.rebootedBotIds, ['bot-03']);
+  assert.equal(singleReboot.updatedBots.find((b) => b.botId === 'bot-03')?.healthState, 'HEALTHY');
+  assert.equal(singleReboot.updatedBots.find((b) => b.botId === 'bot-07')?.healthState, 'DEGRADED');
+
+  // 2. Batch quick-reboot of all degraded bots
+  const batchReboot = rebootDegradedBots(bots);
+  assert.deepEqual(batchReboot.rebootedBotIds, ['bot-03', 'bot-07']);
+  assert.ok(batchReboot.updatedBots.every((b) => b.healthState === 'HEALTHY'));
+
+  // 3. Verify fleet health summary transitions back to OPTIMAL
+  const apis = [
+    { serviceId: 'typesafe-jev', status: 'OPERATIONAL' as const, latencyMs: 42, uptimePercent: 99.99 },
+    { serviceId: 'litellm-router', status: 'OPERATIONAL' as const, latencyMs: 18, uptimePercent: 99.98 }
+  ];
+  const restoredSummary = computeFleetHealthSummary(batchReboot.updatedBots, apis);
+  assert.equal(restoredSummary.overallStatus, 'OPTIMAL');
+  assert.equal(restoredSummary.degradedBots, 0);
+  assert.equal(restoredSummary.healthyBots, 10);
+  assert.equal(restoredSummary.activeWorkerLanes, 8);
 });
