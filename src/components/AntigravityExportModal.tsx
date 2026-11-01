@@ -287,7 +287,7 @@ ${selectedHandbook.botFleet
                 </div>
                 <ol className="list-decimal list-inside space-y-1.5 text-xs text-amber-950 leading-relaxed">
                   <li>
-                    <strong>AI Studio does NOT auto-push on every edit:</strong> The latest changes built here (Competitor Tribunal synthesis, DBOS/Stagehand/Zod stack, and <strong>TypeSafe AI <code>jev-latest</code> System One Confidence Gate</strong> in <code>server.ts</code>) live in this AI Studio workspace until you push them.
+                    <strong>AI Studio does NOT auto-push on every edit:</strong> The latest changes built here (Stage 1 Sub Radar Launchpad, DBOS/Stagehand/Zod stack, and <strong>TypeSafe AI <code>jev-latest</code> System One Confidence Gate</strong> in <code>server.ts</code>) live in this AI Studio workspace until you push them.
                   </li>
                   <li>
                     <strong>How to push to GitHub right now:</strong> Click the <strong>GitHub icon (Save to GitHub)</strong> in the <strong>top-right toolbar of Google AI Studio</strong>, select <code>apex-ronin/DecaFleet-OS</code>, and commit to your branch (or <code>main</code>).

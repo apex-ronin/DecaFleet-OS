@@ -5,23 +5,21 @@ import {
   Cpu,
   ShieldAlert,
   Calculator,
-  Table2,
   Layers,
   Code2,
-  Scale,
+  Zap,
   Activity,
   PanelRightOpen,
   PanelRightClose
 } from 'lucide-react';
 
 export type ActiveTab =
-  | 'tribunal'
+  | 'launchpad'
   | 'handbooks'
   | 'fleet'
   | 'health'
   | 'approvals'
   | 'economics'
-  | 'matrix'
   | 'portfolio';
 
 interface HeaderProps {
@@ -48,8 +46,14 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleHealthSidebar,
   botHealthSummary
 }) => {
-  const navItems: { id: ActiveTab; label: string; icon: React.ElementType; badge?: number; liveBadge?: string }[] = [
-    { id: 'tribunal', label: 'Tribunal Synthesis', icon: Scale },
+  const navItems: {
+    id: ActiveTab;
+    label: string;
+    icon: React.ElementType;
+    badge?: number;
+    liveBadge?: string;
+  }[] = [
+    { id: 'launchpad', label: 'Stage 1: Sub Radar Live', icon: Zap },
     { id: 'handbooks', label: 'Operating Handbooks (6)', icon: BookOpen },
     { id: 'fleet', label: '10-Bot Fleet & Scheduler', icon: Cpu },
     {
@@ -58,10 +62,9 @@ export const Header: React.FC<HeaderProps> = ({
       icon: Activity,
       liveBadge: `${botHealthSummary.healthyBots}/${botHealthSummary.totalBots}`
     },
-    { id: 'approvals', label: 'Human Gate', icon: ShieldAlert, badge: pendingApprovalsCount },
+    { id: 'approvals', label: 'Jev-AI Human Gate', icon: ShieldAlert, badge: pendingApprovalsCount },
     { id: 'economics', label: 'MRR & Browser Budget', icon: Calculator },
-    { id: 'matrix', label: '16-Idea Matrix', icon: Table2 },
-    { id: 'portfolio', label: 'Sequencing & Trigger Gate', icon: Layers }
+    { id: 'portfolio', label: '4-Stage Roadmap & Gate', icon: Layers }
   ];
 
   return (
@@ -80,11 +83,11 @@ export const Header: React.FC<HeaderProps> = ({
                     DecaFleet OS
                   </h1>
                   <span className="text-[11px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200 font-semibold">
-                    REV-3 · JEV-AI GATED
+                    SOVEREIGN EXECUTION · JEV-AI GATED
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  10-Bot Browser Cluster · $399 Wedge + $2,200 Retainer Dual-Track Engine
+                  10-Bot Browser Cluster · Stage 1 Sub Radar ($399/mo) &rarr; Stage 4 Enterprise ($32.5k+ MRR)
                 </p>
               </div>
             </div>

@@ -1,28 +1,6 @@
 export type BusinessType = 'PROVEN' | 'CONTRARIAN';
 export type ConfidenceLevel = 'High' | 'Med' | 'Low';
 
-export interface ScoreBreakdown {
-  spd: number; // Speed to First Dollar (1-5)
-  cap: number; // Capital Efficiency (1-5)
-  mar: number; // Gross Margin % (1-5)
-  ceil: number; // Profit/Revenue Ceiling (1-5)
-  def: number; // Defensibility / Moat (1-5)
-  fit: number; // Fleet Fit / Browser Utility (1-5)
-  wtp: number; // Buyer Willingness to Pay (1-5)
-}
-
-export interface CandidateIdea {
-  id: string;
-  code: string;
-  name: string;
-  category: 'proven' | 'contrarian';
-  scores: ScoreBreakdown;
-  total: number;
-  selected: boolean;
-  rank?: number;
-  statusRationale: string;
-}
-
 export interface BotDefinition {
   name: string;
   role: string;

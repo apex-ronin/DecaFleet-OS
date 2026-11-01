@@ -1,13 +1,3 @@
-export interface ScoreBreakdown {
-  spd: number;
-  cap: number;
-  mar: number;
-  ceil: number;
-  def: number;
-  fit: number;
-  wtp: number;
-}
-
 /**
  * Calculates unit economics for a business given price, variable cost, and client count.
  */
@@ -62,7 +52,7 @@ export function calculateCapacityUtilization(
 }
 
 /**
- * GPT_Buiness.md Quantitative Browser-Minute Concurrency Model:
+ * Quantitative Browser-Minute Concurrency Model:
  * - Standard 8-Lane Mode: 8 active worker lanes * 4,800 browser-min/month = 38,400 browser-min/month (2 bots reserved for Orchestrator/QA).
  * - Single-Pointer Fallback Mode: 1 active OS cursor lane = 4,800 browser-min/month on shared desktop.
  */
@@ -108,21 +98,6 @@ export function calculateHumanHours(
     isOverBudget,
     delta
   };
-}
-
-/**
- * Computes the total candidate score across the 7 decision vectors.
- */
-export function computeTotalScore(scores: ScoreBreakdown): number {
-  return (
-    scores.spd +
-    scores.cap +
-    scores.mar +
-    scores.ceil +
-    scores.def +
-    scores.fit +
-    scores.wtp
-  );
 }
 
 export interface ExpansionGateInput {
@@ -243,4 +218,3 @@ export function computeFleetHealthSummary(
     avgApiLatencyMs
   };
 }
-

@@ -6,7 +6,6 @@ import {
   calculateCapacityUtilization,
   calculateBrowserMinuteBudget,
   calculateHumanHours,
-  computeTotalScore,
   evaluateExpansionGate,
   computeFleetHealthSummary
 } from './calculator.ts';
@@ -29,7 +28,7 @@ test('calculateUnitEconomics computes revenue, costs, and gross margin accuratel
 test('calculateTargetClients calculates client volume thresholds correctly', () => {
   // $30,000 MRR at $2,200/mo -> 14 clients
   assert.equal(calculateTargetClients(30000, 2200), 14);
-  // $10,000 MRR at $399/mo (Grok Sub Radar) -> 26 clients
+  // $10,000 MRR at $399/mo (Sub Radar) -> 26 clients
   assert.equal(calculateTargetClients(10000, 399), 26);
   // $30,000 MRR at $1,800/mo -> 17 clients
   assert.equal(calculateTargetClients(30000, 1800), 17);
@@ -51,7 +50,7 @@ test('calculateCapacityUtilization computes fleet capacity accurately', () => {
   assert.equal(u2.isSaturated, true);
 });
 
-test('calculateBrowserMinuteBudget models GPT 38,400 min/mo 8-lane vs 4,800 min/mo single-pointer fallback', () => {
+test('calculateBrowserMinuteBudget models 38,400 min/mo 8-lane vs 4,800 min/mo single-pointer fallback', () => {
   // 8-Lane Standard Mode: 20 clients * 600 mins/mo = 12,000 / 38,400 mins (31.3% utilization)
   const multiLane = calculateBrowserMinuteBudget(20, 600, false, 8);
   assert.equal(multiLane.totalAvailableMinutes, 38400);
@@ -79,11 +78,6 @@ test('calculateHumanHours enforces the 20 hour weekly ceiling', () => {
   assert.equal(h2.totalHours, 21);
   assert.equal(h2.isOverBudget, true);
   assert.equal(h2.delta, -1);
-});
-
-test('computeTotalScore correctly sums the 7 candidate vectors', () => {
-  const scores = { spd: 5, cap: 5, mar: 5, ceil: 4, def: 5, fit: 5, wtp: 5 };
-  assert.equal(computeTotalScore(scores), 34);
 });
 
 test('evaluateExpansionGate blocks premature Day-3 expansion and passes when Trigger Gates clear', () => {
@@ -154,4 +148,3 @@ test('computeFleetHealthSummary aggregates 10-bot uptime, lanes, and API health 
   assert.equal(degradedSummary.degradedBots, 1);
   assert.equal(degradedSummary.activeWorkerLanes, 7);
 });
-

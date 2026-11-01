@@ -140,6 +140,15 @@ export const FleetConsoleView: React.FC<FleetConsoleViewProps> = ({
           }
         ]);
 
+        const artifactTypeByBusiness: Record<string, ApprovalItem['artifactType']> = {
+          c1: 'compliance_alert',
+          p1: 'sms_verification',
+          p2: 'catalog_patch',
+          p3: 'lead_batch',
+          c2: 'collision_trace',
+          c3: 'bid_package'
+        };
+
         // Push real approval item to parent
         onAddApprovalItem({
           id: `appr-${Date.now()}`,
@@ -147,7 +156,7 @@ export const FleetConsoleView: React.FC<FleetConsoleViewProps> = ({
           botName,
           title: `${activeRoutine.bot}: ${activeRoutine.approvalGate}`,
           summary: `Routine produced artifact [${activeRoutine.outputArtifact}]. Requires human review before final dispatch.`,
-          artifactType: handbook.id === 'p1' ? 'sms_verification' : handbook.id === 'c1' ? 'bid_package' : handbook.id === 'c2' ? 'legal_dispute' : 'lead_batch',
+          artifactType: artifactTypeByBusiness[handbook.id] || 'lead_batch',
           dataPayload: {
             routineTrigger: activeRoutine.trigger,
             artifact: activeRoutine.outputArtifact,

@@ -6,9 +6,6 @@
  * System Two Engine -> TypeSafe AI Jev (System One) Probabilistic Decision Gate
  */
 
-import { GoogleGenAI, Type } from '@google/genai';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 export interface GatePayloadInput {
   id: string;

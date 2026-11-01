@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header.tsx';
+import { SubRadarLaunchpadView } from './components/SubRadarLaunchpadView.tsx';
 import { HandbookDetailView } from './components/HandbookDetailView.tsx';
 import { FleetConsoleView } from './components/FleetConsoleView.tsx';
 import { ApprovalGateView } from './components/ApprovalGateView.tsx';
 import { EconomicsModelerView } from './components/EconomicsModelerView.tsx';
-import { CandidateMatrixView } from './components/CandidateMatrixView.tsx';
 import { PortfolioRoadmapView } from './components/PortfolioRoadmapView.tsx';
-import { TribunalAuditView } from './components/TribunalAuditView.tsx';
 import { AntigravityExportModal } from './components/AntigravityExportModal.tsx';
 import { BotHealthWidget } from './components/BotHealthWidget.tsx';
 import { BUSINESS_HANDBOOKS } from './data/handbooks.ts';
-import { CANDIDATE_IDEAS } from './data/candidates.ts';
-import { TRIBUNAL_CONTENDERS } from './data/tribunal.ts';
 import { ApprovalItem } from './types/index.ts';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>('tribunal');
-  const [selectedBusinessId, setSelectedBusinessId] = useState<string>('c1'); // Default to C1 (Grok's Sub Radar - Stage 1 Winner)
+  const [activeTab, setActiveTab] = useState<string>('launchpad');
+  const [selectedBusinessId, setSelectedBusinessId] = useState<string>('c1'); // Default to C1: Sub Radar (Stage 1 Launchpad)
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
   const [isHealthSidebarOpen, setIsHealthSidebarOpen] = useState<boolean>(false);
   const [botHealthSummary, setBotHealthSummary] = useState<{
@@ -31,7 +28,7 @@ export default function App() {
     overallStatus: 'OPTIMAL'
   });
 
-  // Seed sample initial approval items that demonstrate the human boundary across the Tri-Championship models
+  // Seed initial operational approval items across the 4-stage execution portfolio
   const [approvalItems, setApprovalItems] = useState<ApprovalItem[]>([
     {
       id: 'appr-init-1',
@@ -137,7 +134,7 @@ export default function App() {
     const newItem: ApprovalItem = {
       id: `appr-sample-${Date.now()}`,
       businessId: 'c3',
-      botName: 'HoldGate-08',
+      botName: 'HoldGate-01',
       title: 'Seat Sniper Slot Lock: City of Austin Commercial Electrical Final Inspection',
       summary: 'Cancelled inspection slot detected at 06:03:11 AM CST (11 days earlier than general queue). Slot held in staging session awaiting GC confirmation.',
       artifactType: 'slot_hold',
@@ -155,22 +152,11 @@ export default function App() {
   };
 
   const handleExportAll = () => {
-    let masterDoc = `# DECAFLEET OS: MASTER OPERATIONAL BLUEPRINT & TRI-CHAMPIONSHIP SYNTHESIS
-Document ID: AUDIT-DECAFLEET-2026-10-21-REV2
+    let masterDoc = `# DECAFLEET OS: SOVEREIGN EXECUTION MASTER BLUEPRINT
 Platform: 10 Persistent Cloud Browser Agents | Max Concurrency: 38,400 min/mo (8 lanes) / 4,800 min/mo (Single-Pointer Fallback) | Operator Budget: 20 Hours/Week | Capital: $0-$300
 
 ================================================================================
-SECTION 0A: COMPETITION TRIBUNAL SCORECARD (7 CONTENDERS)
-================================================================================
-${TRIBUNAL_CONTENDERS.map((t) => `- #${t.rank} ${t.name} (${t.artifactFile}) | Score: ${t.totalScore}/100 | Badge: ${t.placementBadge}\n  Breakthrough: ${t.coreBreakthrough}`).join('\n\n')}
-
-================================================================================
-SECTION 0B: CANDIDATE SCORING MATRIX (12 PROVEN + 12 CONTRARIAN)
-================================================================================
-${CANDIDATE_IDEAS.map((c) => `- [${c.code}] ${c.name} (${c.category.toUpperCase()}) | Total: ${c.total}/35 | Status: ${c.statusRationale}`).join('\n')}
-
-================================================================================
-THE 6 TRI-CHAMPIONSHIP BUSINESS HANDBOOKS
+THE 6 OPERATING BUSINESS HANDBOOKS
 ================================================================================
 `;
 
@@ -195,11 +181,11 @@ Confidence: ${hb.confidence}
 
     masterDoc += `
 ================================================================================
-SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
+4-STAGE DECAFLEET-OS EXECUTION MASTER PLAN
 ================================================================================
-1. Stage 1 (Days 1–14): Sub Radar (C1 - Ara Grok) — Zero-login public state licensing boards (CSLB, TDLR, DBPR). $149 40-Sub Roster Audit -> $399/mo retainer.
-2. Stage 2 (Days 15–30): Trade Map Desk (P1 - Ara Grok) — Zero-CAC cross-sell to the exact same GC & commercial trade buyers (+$449/mo) + Claude P3 $75 No-Login Funnel Audits.
-3. Stage 3 (Days 31–60): Catalog Exception Desk (P2 - GPT_Buiness) — Corporate e-commerce feed & merchandising exception desk ($1,000/mo Core).
+1. Stage 1 (Days 1–14): Sub Radar (C1) — Zero-login public state licensing boards (CSLB, TDLR, DBPR). $149 40-Sub Roster Audit -> $399/mo retainer.
+2. Stage 2 (Days 15–30): Trade Map Desk (P1) — Zero-CAC cross-sell to the exact same GC & commercial trade buyers (+$449/mo) + P3 $75 No-Login Funnel Audits.
+3. Stage 3 (Days 31–60): Catalog Exception Desk (P2) — Corporate e-commerce feed & merchandising exception desk ($1,000/mo Core).
 4. Stage 4 (Day 60+): Hermes + Stagehand + DBOS Stack + Fleet Collision Lab (C2 - $1,800/mo) + Seat Sniper (C3 - $400/mo).
 `;
 
@@ -207,19 +193,19 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `DecaFleet_OS_TriChampionship_Master_Blueprint.md`;
+    a.download = `DecaFleet_OS_Sovereign_Execution_Blueprint.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const handleSelectBusinessFromMatrix = (id: string) => {
+  const handleSelectBusinessAndOpenHandbook = (id: string) => {
     setSelectedBusinessId(id);
     setActiveTab('handbooks');
   };
 
   return (
     <div className="min-h-screen bg-slate-100/60 text-slate-900 flex flex-col font-sans">
-      {/* 3-Zone Top Bar Navigation */}
+      {/* Top Bar Navigation */}
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -230,7 +216,7 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
         botHealthSummary={botHealthSummary}
       />
 
-      {/* Persistent Right-Hand Bot Health Sidebar Overlay (accessible from any tab) */}
+      {/* Persistent Right-Hand Bot Health Sidebar Overlay */}
       <BotHealthWidget
         mode="sidebar"
         selectedBusinessId={selectedBusinessId}
@@ -254,11 +240,12 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'tribunal' && (
-          <TribunalAuditView
-            onSelectBusiness={handleSelectBusinessFromMatrix}
+        {activeTab === 'launchpad' && (
+          <SubRadarLaunchpadView
+            onSelectBusiness={handleSelectBusinessAndOpenHandbook}
             onAddApprovalItem={handleAddApprovalItem}
             onNavigateToApprovals={() => setActiveTab('approvals')}
+            onNavigateToRoadmap={() => setActiveTab('portfolio')}
           />
         )}
 
@@ -299,12 +286,8 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
 
         {activeTab === 'economics' && <EconomicsModelerView />}
 
-        {activeTab === 'matrix' && (
-          <CandidateMatrixView onSelectBusiness={handleSelectBusinessFromMatrix} />
-        )}
-
         {activeTab === 'portfolio' && (
-          <PortfolioRoadmapView onSelectBusiness={handleSelectBusinessFromMatrix} />
+          <PortfolioRoadmapView onSelectBusiness={handleSelectBusinessAndOpenHandbook} />
         )}
       </main>
 
@@ -314,7 +297,7 @@ SECTION 18: 4-STAGE ULTIMATE DECAFLEET-OS EXECUTION MASTER PLAN
           <div className="flex items-center gap-2">
             <span className="font-bold text-slate-900">DecaFleet OS</span>
             <span aria-hidden="true">·</span>
-            <span>AUDIT-DECAFLEET-2026-10-21-REV2 Tri-Championship Synthesis</span>
+            <span>Sovereign 10-Bot Execution Command Center</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span>38,400 Browser-Min/Mo (8 Lanes)</span>

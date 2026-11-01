@@ -1,41 +1,37 @@
 import React, { useState } from 'react';
 import {
-  TRIBUNAL_CONTENDERS,
   SUB_RADAR_LIVE_ROSTER,
   HERMES_STACK_SPEC
-} from '../data/tribunal.ts';
+} from '../data/subRadarRoster.ts';
 import { ApprovalItem } from '../types/index.ts';
 import {
-  Award,
   ShieldCheck,
   AlertTriangle,
-  CheckCircle2,
-  XCircle,
   Cpu,
   ArrowRight,
   Copy,
   Check,
-  Send
+  Send,
+  Zap,
+  Layers
 } from 'lucide-react';
 
-interface TribunalAuditViewProps {
+interface SubRadarLaunchpadViewProps {
   onSelectBusiness: (businessId: string) => void;
   onAddApprovalItem: (item: ApprovalItem) => void;
   onNavigateToApprovals: () => void;
+  onNavigateToRoadmap: () => void;
 }
 
-export const TribunalAuditView: React.FC<TribunalAuditViewProps> = ({
+export const SubRadarLaunchpadView: React.FC<SubRadarLaunchpadViewProps> = ({
   onSelectBusiness,
   onAddApprovalItem,
-  onNavigateToApprovals
+  onNavigateToApprovals,
+  onNavigateToRoadmap
 }) => {
-  const [selectedContenderId, setSelectedContenderId] = useState<string>('ara-grok');
   const [stateFilter, setStateFilter] = useState<string>('ALL');
   const [copiedStack, setCopiedStack] = useState<boolean>(false);
   const [dispatchedAlertIds, setDispatchedAlertIds] = useState<string[]>([]);
-
-  const selectedContender =
-    TRIBUNAL_CONTENDERS.find((c) => c.id === selectedContenderId) || TRIBUNAL_CONTENDERS[1];
 
   const filteredSubs = SUB_RADAR_LIVE_ROSTER.filter((s) =>
     stateFilter === 'ALL' ? true : s.stateBoard.includes(stateFilter)
@@ -50,7 +46,7 @@ export const TribunalAuditView: React.FC<TribunalAuditViewProps> = ({
       summary:
         sub.liabilityAlert ||
         `Public state board diff detected status change for ${sub.subcontractorName}. Gate: Operator approval before sending $149 Audit / $399 Retainer alert to General Contractor.`,
-      artifactType: 'email_draft',
+      artifactType: 'compliance_alert',
       dataPayload: {
         subcontractor: sub.subcontractorName,
         trade: sub.trade,
@@ -68,7 +64,7 @@ export const TribunalAuditView: React.FC<TribunalAuditViewProps> = ({
     setDispatchedAlertIds((prev) => [...prev, sub.id]);
   };
 
-  const stackYaml = `# DecaFleet-OS Sovereign Production Stack (GPT_AI-Agent-Market-Research 100/100 Spec)
+  const stackYaml = `# DecaFleet-OS Sovereign Production Stack
 # Architecture: Hermes Agent + Stagehand + LiteLLM + DBOS + invisible_playwright_mcp
 version: "3.9"
 services:
@@ -96,7 +92,7 @@ services:
       - DBOS_DATABASE_URL=postgresql://operator:sovereign_local_only@dbos-state-engine:5432/decafleet_dbos
       - MAX_CONCURRENT_LANES=8 # 38,400 browser-min/month capacity (2 hot-spare lanes)
       - SINGLE_POINTER_FALLBACK_LOCK=false
-      - HUMAN_PERMISSION_BROKER_WEBHOOK=http://localhost:3000/api/gate`;
+      - HUMAN_PERMISSION_BROKER_WEBHOOK=http://localhost:3000/api/jev-ai/evaluate`;
 
   const handleCopyStack = () => {
     navigator.clipboard.writeText(stackYaml);
@@ -106,23 +102,23 @@ services:
 
   return (
     <div className="space-y-8">
-      {/* Header Banner */}
+      {/* Stage 1 Hero Command Banner */}
       <div className="bg-slate-900 text-white rounded-lg p-6 border border-slate-800 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400 mb-1">
-              <Award className="w-4 h-4" />
-              <span>DOCUMENT ID: AUDIT-DECAFLEET-2026-10-21-REV2 · APEX-RONIN SWARM TRIBUNAL</span>
+              <Zap className="w-4 h-4" />
+              <span>STAGE 1 EXECUTION LAUNCHPAD · ZERO-CREDENTIAL PUBLIC REGISTRY WEDGE</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white">
-              The Competition Tribunal &amp; Tri-Championship Synthesis
+              DecaFleet-OS Sovereign Execution Command Center
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-3xl">
-              Forensic audit of all 7 contender architectures, integrating{' '}
-              <strong className="text-white">GPT_Buiness.md (96/100 Best of Class)</strong>,{' '}
-              <strong className="text-emerald-400">Ara - Grok &ldquo;Sub Radar&rdquo; (95/100 Most Likely to Succeed)</strong>,{' '}
-              <strong className="text-white">Claude Rebuild (91/100 No-Login Default)</strong>, and the{' '}
-              <strong className="text-amber-300">Hermes + LiteLLM + Stagehand + DBOS (100/100 Stack)</strong>.
+              Immediate execution engine starting with{' '}
+              <strong className="text-emerald-400">C1: Sub Radar ($149 Audit &rarr; $399/mo GC Retainer)</strong>, expanding into{' '}
+              <strong className="text-white">P1: Trade Map Desk (+$449/mo Zero-CAC Cross-Sell)</strong>,{' '}
+              <strong className="text-white">P2: Catalog Exception Desk ($1,000/mo)</strong>, and{' '}
+              <strong className="text-amber-300">C2/C3 Enterprise QA &amp; Municipal Auto-Desk</strong>.
             </p>
           </div>
 
@@ -131,188 +127,94 @@ services:
               onClick={() => onSelectBusiness('c1')}
               className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <span>Open C1: Grok Sub Radar Handbook</span>
+              <span>Open C1: Sub Radar Handbook</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => onSelectBusiness('p2')}
-              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs rounded-lg border border-slate-700 transition-colors cursor-pointer"
+              onClick={onNavigateToRoadmap}
+              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              Open P2: GPT Catalog Exception Desk
+              <Layers className="w-3.5 h-3.5 text-indigo-400" />
+              <span>View 4-Stage Execution Roadmap</span>
             </button>
           </div>
         </div>
 
-        {/* The Tri-Championship Podium Cards */}
+        {/* 4-Stage Execution Sequence Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-5">
-          <div className="p-4 rounded-lg bg-slate-800/90 border border-slate-700">
-            <div className="text-xs font-mono text-amber-400 font-semibold">🏆 BEST OF CLASS (96 / 100)</div>
-            <div className="text-base font-bold text-white mt-0.5">GPT_Buiness.md</div>
-            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-              141 KB complete 17-section math, <strong>38,400 browser-min/mo</strong> (8 lanes) vs.{' '}
-              <strong>4,800 min/mo</strong> single-pointer fallback, Catalog Exception Desk (P-B) &amp; Fleet Collision Lab (C-A).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-lg bg-emerald-950/60 border border-emerald-500/40">
+          <div
+            onClick={() => onSelectBusiness('c1')}
+            className="p-4 rounded-lg bg-emerald-950/60 border border-emerald-500/40 cursor-pointer hover:border-emerald-400 transition-colors"
+          >
             <div className="text-xs font-mono text-emerald-400 font-semibold">
-              🥇 MOST LIKELY TO SUCCEED (95 / 100)
+              STAGE 1 · WEEKS 1–4 ($4k+ MRR)
             </div>
-            <div className="text-base font-bold text-white mt-0.5">Ara - Grok (&ldquo;Sub Radar&rdquo;)</div>
+            <div className="text-base font-bold text-white mt-0.5">C1: Sub Radar</div>
             <p className="text-xs text-slate-200 mt-1.5 leading-relaxed">
-              Targets <strong>100% public state contractor licensing boards (CSLB, TDLR, DBPR)</strong>. Zero client credentials, zero logins, zero ban risk. $149 Audit &rarr; $399/mo GC retainer.
+              Queries <strong>100% public state contractor licensing boards (CSLB, TDLR, DBPR)</strong>. Zero client credentials, zero logins, zero ban risk. $149 Audit &rarr; $399/mo GC retainer.
             </p>
           </div>
 
-          <div className="p-4 rounded-lg bg-slate-800/90 border border-slate-700">
-            <div className="text-xs font-mono text-sky-400 font-semibold">🥈 3RD PLACE (91 / 100)</div>
-            <div className="text-base font-bold text-white mt-0.5">Claude-OF-OUT-USA Rebuilt</div>
+          <div
+            onClick={() => onSelectBusiness('p1')}
+            className="p-4 rounded-lg bg-slate-800/90 border border-slate-700 cursor-pointer hover:border-slate-500 transition-colors"
+          >
+            <div className="text-xs font-mono text-sky-400 font-semibold">
+              STAGE 2 · MONTHS 2–3 ($15k+ MRR)
+            </div>
+            <div className="text-base font-bold text-white mt-0.5">
+              P1: Trade Map + P3: Funnel Desk
+            </div>
             <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-              Created the mandatory <strong>&ldquo;No-Login Default&rdquo;</strong> and{' '}
-              <strong>&ldquo;Metadata-Only&rdquo;</strong> doctrines plus the fast $75 Day-5 deposit wedge.
+              Zero-CAC cross-sell of <strong>Trade Map Desk ($449/mo)</strong> to existing Sub Radar GCs + <strong>$75 No-Login Funnel &amp; Metadata Audits (P3)</strong>.
             </p>
           </div>
 
-          <div className="p-4 rounded-lg bg-slate-800/90 border border-slate-700">
-            <div className="text-xs font-mono text-purple-400 font-semibold">🎖️ SPECIAL STACK (100 / 100)</div>
-            <div className="text-base font-bold text-white mt-0.5">GPT Market Research</div>
+          <div
+            onClick={() => onSelectBusiness('p2')}
+            className="p-4 rounded-lg bg-slate-800/90 border border-slate-700 cursor-pointer hover:border-slate-500 transition-colors"
+          >
+            <div className="text-xs font-mono text-amber-400 font-semibold">
+              STAGE 3 · MONTHS 4–6 ($25k+ MRR)
+            </div>
+            <div className="text-base font-bold text-white mt-0.5">
+              P2: Catalog Exception Desk
+            </div>
             <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-              Mandatory production engineering stack: <strong>Hermes Agent + LiteLLM + Stagehand + DBOS</strong> paired with stealth MCP workers.
+              Corporate Shopify Plus / GMC feed exception resolution at <strong>$1,000/mo</strong> using exported CSV feeds and storefront DOM diffs.
+            </p>
+          </div>
+
+          <div
+            onClick={() => onSelectBusiness('c2')}
+            className="p-4 rounded-lg bg-slate-800/90 border border-slate-700 cursor-pointer hover:border-slate-500 transition-colors"
+          >
+            <div className="text-xs font-mono text-purple-400 font-semibold">
+              STAGE 4 · MONTH 6+ ($32.5k+ MRR)
+            </div>
+            <div className="text-base font-bold text-white mt-0.5">
+              C2: Collision Lab + C3: Seat Sniper
+            </div>
+            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              8-lane multi-agent checkout collision QA (<strong>$1,800/mo</strong>) + 15-minute municipal inspection slot &amp; micro-RFP sniper (<strong>$400–$1,400/mo</strong>).
             </p>
           </div>
         </div>
       </div>
 
-      {/* SECTION 1: 7-Contender Forensic Scorecard Matrix */}
-      <div className="bg-white border border-slate-200 rounded-lg shadow-2xs overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h2 className="text-base font-bold text-slate-900">
-              1. 7-Contender Tribunal Scorecard Matrix
-            </h2>
-            <p className="text-xs text-slate-500">
-              Click any contender row to inspect what was integrated into DecaFleet-OS vs. what was forensically killed.
-            </p>
-          </div>
-          <span className="text-xs font-mono text-slate-500">
-            Weights: Schema (20%) · Fleet Realism (25%) · 7-Day Cash (20%) · Legal/ToS (20%) · Grounding (15%)
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
-                <th className="py-3 px-4">Contender Artifact</th>
-                <th className="py-3 px-3 text-center">Schema (20)</th>
-                <th className="py-3 px-3 text-center">Fleet Realism (25)</th>
-                <th className="py-3 px-3 text-center">7-Day Cash (20)</th>
-                <th className="py-3 px-3 text-center">Legal &amp; ToS (20)</th>
-                <th className="py-3 px-3 text-center">Grounding (15)</th>
-                <th className="py-3 px-4 text-right">Total Score</th>
-                <th className="py-3 px-4">Tribunal Verdict</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {TRIBUNAL_CONTENDERS.map((c) => {
-                const isSelected = c.id === selectedContenderId;
-                return (
-                  <tr
-                    key={c.id}
-                    onClick={() => setSelectedContenderId(c.id)}
-                    className={`cursor-pointer transition-colors ${
-                      isSelected ? 'bg-slate-900 text-white' : 'hover:bg-slate-50 text-slate-800'
-                    }`}
-                  >
-                    <td className="py-3 px-4 font-bold">{c.name}</td>
-                    <td className="py-3 px-3 text-center font-mono">
-                      {c.status === 'SPECIAL_STACK' ? 'N/A' : `${c.scores.promptCompliance}/20`}
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono font-semibold">
-                      {c.scores.fleetRealism}/25
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono">
-                      {c.status === 'SPECIAL_STACK' ? 'N/A' : `${c.scores.cashAndEconomics}/20`}
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono">
-                      {c.status === 'SPECIAL_STACK' ? 'N/A' : `${c.scores.legalAndToS}/20`}
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono">{c.scores.grounding}/15</td>
-                    <td className="py-3 px-4 text-right font-mono font-bold text-sm">
-                      {c.status === 'SPECIAL_STACK' ? '100 (Tech)' : `${c.totalScore} / 100`}
-                    </td>
-                    <td className="py-3 px-4 font-medium">{c.placementBadge}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Selected Contender Forensic Drawer */}
-        <div className="p-6 bg-slate-50 border-t border-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-500">
-                Forensic Inspection: {selectedContender.artifactFile}
-              </span>
-              <span className="text-xs font-bold text-slate-900">
-                {selectedContender.placementBadge}
-              </span>
-            </div>
-            <h3 className="text-sm font-bold text-slate-900">{selectedContender.name}</h3>
-            <p className="text-xs text-slate-700 leading-relaxed">
-              {selectedContender.coreBreakthrough}
-            </p>
-
-            {selectedContender.adoptedIntoDecaFleet.length > 0 && (
-              <div className="pt-2">
-                <div className="text-xs font-bold text-emerald-800 mb-1.5 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Adopted Directly into DecaFleet-OS Production Codebase:</span>
-                </div>
-                <ul className="space-y-1 text-xs text-slate-700">
-                  {selectedContender.adoptedIntoDecaFleet.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold">&bull;</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <div className="p-4 bg-white border border-slate-200 rounded-lg space-y-2">
-            <div className="text-xs font-bold text-rose-800 flex items-center gap-1.5">
-              <XCircle className="w-3.5 h-3.5 text-rose-600" />
-              <span>Forensic Audit Notes / Disqualification Traps Avoided:</span>
-            </div>
-            <ul className="space-y-1.5 text-xs text-slate-700 leading-relaxed">
-              {selectedContender.forensicFlawsOrKills.map((flaw, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <span className="text-rose-500 font-bold">&bull;</span>
-                  <span>{flaw}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 2: Interactive Ara-Grok "Sub Radar" Public Registry Monitor */}
+      {/* SECTION 1: Interactive "Sub Radar" Public Registry Monitor */}
       <div className="bg-white border border-slate-200 rounded-lg shadow-2xs overflow-hidden">
         <div className="px-6 py-4 bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
               <ShieldCheck className="w-4 h-4" />
-              <span>STAGE 1 LAUNCHPAD · ARA-GROK &ldquo;SUB RADAR&rdquo; LIVE ENGINE</span>
+              <span>STAGE 1 LIVE OPERATIONS · C1 SUB RADAR REGISTRY MONITOR</span>
             </div>
             <h2 className="text-base font-bold mt-0.5">
-              2. Zero-Credential Public State Contractor Registry Diff (CSLB · TDLR · DBPR)
+              1. Zero-Credential Public State Contractor Registry Diff (CSLB · TDLR · DBPR)
             </h2>
             <p className="text-xs text-slate-300">
-              Simulates BoardScout-01–04 querying public state licensing boards for a General Contractor&apos;s subcontractor roster. Zero client logins required.
+              BoardScout-01–04 daily public state licensing board poll for a General Contractor&apos;s 40-subcontractor roster. Queue any breach directly to the Jev-AI Human Gate.
             </p>
           </div>
 
@@ -343,7 +245,7 @@ services:
                 <th className="py-3 px-3">License Status</th>
                 <th className="py-3 px-3">Surety Bond</th>
                 <th className="py-3 px-3">Workers-Comp</th>
-                <th className="py-3 px-4 text-right">Human Gate Action</th>
+                <th className="py-3 px-4 text-right">Jev-AI Gate Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
@@ -393,7 +295,7 @@ services:
                               className="px-2.5 py-1 bg-amber-100 text-amber-900 font-semibold rounded text-[11px] inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Check className="w-3 h-3" />
-                              <span>Queued in Human Gate &rarr;</span>
+                              <span>Queued in Jev-AI Gate &rarr;</span>
                             </button>
                           ) : (
                             <button
@@ -425,16 +327,16 @@ services:
         </div>
       </div>
 
-      {/* SECTION 3: Production Engineering Stack (Hermes + LiteLLM + Stagehand + DBOS) */}
+      {/* SECTION 2: Production Engineering Stack (Hermes + LiteLLM + Stagehand + DBOS) */}
       <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
           <div>
             <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500">
               <Cpu className="w-4 h-4 text-slate-800" />
-              <span>COMPANION ENGINEERING SPEC (100 / 100 SPECIAL AWARD)</span>
+              <span>PRODUCTION CONTAINER ORCHESTRATION RUNTIME</span>
             </div>
             <h2 className="text-base font-bold text-slate-900 mt-0.5">
-              3. {HERMES_STACK_SPEC.architectureName}
+              2. {HERMES_STACK_SPEC.architectureName}
             </h2>
           </div>
 

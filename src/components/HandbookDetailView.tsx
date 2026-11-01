@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BUSINESS_HANDBOOKS } from '../data/handbooks.ts';
 import { BusinessHandbook } from '../types/index.ts';
 import { 
@@ -39,6 +39,15 @@ export const HandbookDetailView: React.FC<HandbookDetailViewProps> = ({
       return [1];
     }
   });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`cashplan_${selectedBusinessId}`);
+      setCompletedDays(saved ? JSON.parse(saved) : [1]);
+    } catch {
+      setCompletedDays([1]);
+    }
+  }, [selectedBusinessId]);
 
   const handbook = BUSINESS_HANDBOOKS.find((b) => b.id === selectedBusinessId) || BUSINESS_HANDBOOKS[0];
 

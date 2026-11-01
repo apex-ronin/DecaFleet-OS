@@ -244,13 +244,22 @@ function composeAndGateSystemOneAnswers(
     blastScore <= 0.45 &&
     compositeLiabilityRisk <= 0.15
   ) {
+    const isShadow = item.autonomyPolicy === 'shadow';
     tier = 'TIER_1_AUTO_DISPATCH';
     decision = 'APPROVE';
-    isGated = false;
-    gateReason = `Cleared Tier-1 Autonomous Gate: P(auto_dispatch)=${winningChoiceProb.toFixed(2)} (>=0.85), Evidence Noul=${evidenceNoul.toFixed(2)}, Composite Risk=${compositeLiabilityRisk.toFixed(2)}.`;
+    isGated = isShadow;
+    gateReason = isShadow
+      ? `Shadow Advisory Mode active: Cleared Tier-1 thresholds (P=${winningChoiceProb.toFixed(2)}), staged for human confirmation.`
+      : `Cleared Tier-1 Autonomous Gate: P(auto_dispatch)=${winningChoiceProb.toFixed(2)} (>=0.85), Evidence Noul=${evidenceNoul.toFixed(2)}, Composite Risk=${compositeLiabilityRisk.toFixed(2)}.`;
     policyThresholdApplied = 'Tier-1 Auto-Dispatch Policy: P(auto_dispatch) >= 0.85 & blast_radius <= 0.45 & composite_risk <= 0.15';
-    rationale = `All 6 parallel System One questions cleared the high-confidence autonomous threshold (P=${(winningChoiceProb * 100).toFixed(0)}%, blast_radius=${blastScore.toFixed(2)}/2.0). Safe for zero-click autonomous execution.`;
-    recommendedAction = 'Auto-Dispatch immediately via DBOS worker without human interruption.';
+    rationale = `All 6 parallel System One questions cleared the high-confidence autonomous threshold (P=${(winningChoiceProb * 100).toFixed(0)}%, blast_radius=${blastScore.toFixed(2)}/2.0). ${
+      isShadow
+        ? 'Shadow Advisory policy held execution for manual operator release.'
+        : 'Safe for zero-click autonomous execution.'
+    }`;
+    recommendedAction = isShadow
+      ? 'Shadow Advisory: Qualified for Tier-1 Auto-Dispatch (click Approve to release).'
+      : 'Auto-Dispatch immediately via DBOS worker without human interruption.';
     timeSavedMinutes = 15;
   }
   // GATE 5: Tier-2 Pre-Adjudicated Co-Sign Batch Gate (Prob >= 0.70, Composite Risk <= 0.50)
@@ -662,12 +671,17 @@ async function startServer() {
   // Jev-AI Single Item Adjudication Endpoint
   app.post('/api/jev-ai/evaluate', async (req, res) => {
     try {
-      const item: GatePayloadInput = req.body.item;
-      if (!item || !item.id) {
+      const rawItem: GatePayloadInput = req.body.item;
+      if (!rawItem || !rawItem.id) {
         res.status(400).json({ error: 'Missing gate item payload' });
         return;
       }
-      const result = await evaluateWithJevOrGeminiOrFallback(item);
+      const autonomyPolicy =
+        req.body.autonomyPolicy === 'shadow' ? 'shadow' : 'constitutional_autopilot';
+      const result = await evaluateWithJevOrGeminiOrFallback({
+        ...rawItem,
+        autonomyPolicy: rawItem.autonomyPolicy || autonomyPolicy
+      });
       res.json({ decision: result });
     } catch (error: any) {
       res.status(500).json({ error: error?.message || 'Jev-AI evaluation failed' });
@@ -678,8 +692,15 @@ async function startServer() {
   app.post('/api/jev-ai/evaluate-batch', async (req, res) => {
     try {
       const items: GatePayloadInput[] = Array.isArray(req.body.items) ? req.body.items : [];
+      const autonomyPolicy =
+        req.body.autonomyPolicy === 'shadow' ? 'shadow' : 'constitutional_autopilot';
       const results = await Promise.all(
-        items.map((item) => evaluateWithJevOrGeminiOrFallback(item))
+        items.map((item) =>
+          evaluateWithJevOrGeminiOrFallback({
+            ...item,
+            autonomyPolicy: item.autonomyPolicy || autonomyPolicy
+          })
+        )
       );
       res.json({ decisions: results });
     } catch (error: any) {

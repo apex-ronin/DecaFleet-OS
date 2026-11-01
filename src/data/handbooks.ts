@@ -1268,110 +1268,125 @@ export const BUSINESS_HANDBOOKS: BusinessHandbook[] = [
     },
     botFleet: [
       {
-        name: 'Trap-01 to Trap-04',
-        role: 'Review & Forum Crawlers (4 Bots)',
-        jobDescription: 'You are a real-time competitor sentiment crawler. Continuously patrol assigned review directories (G2, Capterra, TrustRadius, Gartner Peer Insights) and specialized tech subreddits. Filter strictly for 1-star to 3-star reviews and negative sentiment complaint threads. Extract the reviewer\'s title, company size, industry, specific pain points, and timestamp. Write records to /shared/data/churn_events.csv.',
-        capability: 'Dynamic DOM traversal + text extraction',
+        name: 'SlotScout-01 to SlotScout-04',
+        role: 'Municipal Slot & Seat Pollers (4 Bots)',
+        jobDescription: 'You are a high-frequency public municipal scheduling poller. Poll assigned city building inspection calendars (Accela, CivicPlus, Austin AB+C) and state trade exam availability tables (PSI/Prometric public seat finders) every 15 minutes. Detect newly cancelled inspection windows or exam seats that open earlier than the client’s current booking date, and write timestamps + slot IDs to /shared/data/open_slots.json.',
+        capability: 'Stagehand DOM table diffing + NanoClaw SHA-256 wake-gate',
+        approvalBoundary: 'Autonomous (Read-only public availability polling)'
+      },
+      {
+        name: 'BidScout-01 to BidScout-03',
+        role: 'County Micro-RFP Harvesters (3 Bots)',
+        jobDescription: 'Crawl 40 assigned county, school district, and municipal procurement portals (DemandStar, OpenGov, legacy county ASP.NET boards) twice daily. Filter strictly for specialty trade subcontracts and micro-RFPs under $50,000 (electrical, HVAC, concrete, painting, glazing) where prime GC bonding hurdles are waived. Save matching bid notices and PDF links to /shared/data/muni_rfps.csv.',
+        capability: 'Public portal traversal + PDF link extraction',
         approvalBoundary: 'Autonomous'
       },
       {
-        name: 'IDResolve-01 to IDResolve-03',
-        role: 'Account Resolvers (3 Bots)',
-        jobDescription: 'Read records from /shared/data/churn_events.csv. Take the reviewer\'s industry, company size, and specific role title. Search LinkedIn and Google to triangulate and identify the most likely specific company and decision-maker experiencing the issue. Write matched candidate accounts to /shared/data/resolved_accounts.csv.',
-        capability: 'Cross-platform search queries + heuristic matching',
+        name: 'SpecParse-01',
+        role: 'RFP Scope & Prevailing Wage Parser (1 Bot)',
+        jobDescription: 'Monitor /shared/data/muni_rfps.csv. Download municipal RFP PDFs, extract scope of work, submission deadline, bonding/COI thresholds, and prevailing wage tables, and output a 1-page Go/No-Go Estimator Brief to /shared/reports/govdesk/.',
+        capability: 'Terminal PDF OCR + structured schema extraction',
         approvalBoundary: 'Autonomous'
       },
       {
-        name: 'Battlecard-01 & Battlecard-02',
-        role: 'Battlecard Generators (2 Bots)',
-        jobDescription: 'Monitor /shared/data/resolved_accounts.csv. Take the competitor\'s specific product failure and generate a tailored 1-page Competitive Displacement Battlecard, highlighting our client\'s exact feature strengths over the competitor\'s weakness. Output to /shared/reports/battlecards/.',
-        capability: 'Prompt engineering + PDF generation',
-        approvalBoundary: 'Autonomous'
+        name: 'HoldGate-01',
+        role: 'Reversible Slot Staging Bot (1 Bot)',
+        jobDescription: 'When SlotScout detects a cancelled municipal inspection window >5 days earlier than the contractor’s current date, stage the slot hold in the portal session and immediately notify the GC superintendent for 1-click confirmation.',
+        capability: 'DOM calendar selection + DBOS checkpointing',
+        approvalBoundary: 'Tier-1 Auto-Hold (reversible staging) / Tier-2 GC Confirmation before final reschedule commit'
       },
       {
-        name: 'Push-01',
-        role: 'Sales Dispatch Bot (1 Bot)',
-        jobDescription: 'Log into client CRM or push to client Slack channels. Upload the verified churn lead, the battlecard, and suggested SDR outreach hooks.',
-        capability: 'CRM login + API execution',
-        approvalBoundary: 'Gate: Human spot-checks lead validity before alert push'
+        name: 'FormPrep-01',
+        role: 'Municipal Bid Packet Stager (1 Bot)',
+        jobDescription: 'Pre-fill municipal vendor compliance forms, W-9, Certificate of Insurance (COI), and prevailing wage acknowledgments for qualified <$50k micro-RFPs. Pause workflow at the final portal submission screen.',
+        capability: 'Multi-page PDF/web form population',
+        approvalBoundary: 'Gate: Tier-3 Hard Human Lock — Mandatory human officer wet signature & 2FA token required'
       }
     ],
     routines: [
       {
-        bot: 'Trap-01–04',
-        trigger: 'Every 4 hours',
-        inputSource: 'Target Review & Forum URLs',
-        outputArtifact: 'churn_events.csv',
-        approvalGate: 'None (Autonomous)',
-        failureBehaviour: 'Rotate proxy profile, retry'
+        bot: 'SlotScout-01–04',
+        trigger: 'Every 15 minutes (06:00–20:00)',
+        inputSource: '10 Municipal Accela / PSI Calendar URLs',
+        outputArtifact: '/shared/data/open_slots.json',
+        approvalGate: 'None (Autonomous Public Polling)',
+        failureBehaviour: 'DBOS step retry; skip LLM wake if SHA-256 DOM hash unchanged'
       },
       {
-        bot: 'IDResolve-01–03',
-        trigger: 'On new event detection',
-        inputSource: 'churn_events.csv',
-        outputArtifact: 'resolved_accounts.csv',
+        bot: 'BidScout-01–03',
+        trigger: 'Twice daily (05:30, 13:30)',
+        inputSource: '40 County & School District RFP Portals',
+        outputArtifact: '/shared/data/muni_rfps.csv',
         approvalGate: 'None (Autonomous)',
-        failureBehaviour: 'Flag low-confidence matches'
+        failureBehaviour: 'Cache broken selector, trigger Stagehand auto-heal'
       },
       {
-        bot: 'Battlecard-01–02',
-        trigger: 'Twice daily (08:00, 14:00)',
-        inputSource: 'resolved_accounts.csv',
-        outputArtifact: 'Displacement Battlecards PDF',
+        bot: 'SpecParse-01',
+        trigger: 'On new RFP detection',
+        inputSource: 'muni_rfps.csv + Bid PDF attachments',
+        outputArtifact: '1-Page Estimator Go/No-Go Brief PDF',
         approvalGate: 'None (Autonomous)',
-        failureBehaviour: 'Regenerate on formatting error'
+        failureBehaviour: 'Flag scanned PDF for OCR fallback'
       },
       {
-        bot: 'Push-01',
-        trigger: 'Daily @ 16:00',
-        inputSource: 'Displacement Battlecards',
-        outputArtifact: 'CRM Records / Slack Alert',
-        approvalGate: 'Gate: Human verifies company ID',
-        failureBehaviour: 'Pause push, alert operator'
+        bot: 'HoldGate-01',
+        trigger: 'Immediate on slot opening >5 days earlier',
+        inputSource: 'open_slots.json',
+        outputArtifact: 'Staged Inspection Slot Hold',
+        approvalGate: 'Tier-1 Reversible Hold -> GC SMS Confirmation',
+        failureBehaviour: 'Release hold if unconfirmed within 15m TTL'
+      },
+      {
+        bot: 'FormPrep-01',
+        trigger: 'Daily @ 15:00 for approved RFPs',
+        inputSource: 'Client COI/W-9 Vault + Estimator Brief',
+        outputArtifact: 'Pre-filled Municipal Bid Package',
+        approvalGate: 'Gate: Tier-3 Hard Human Lock (Officer Signature)',
+        failureBehaviour: 'Halt DBOS workflow, alert operator inbox'
       }
     ],
     skillsToBuild: [
       {
         order: 1,
-        title: 'Dynamic Review Board Monitor',
-        description: 'Navigates dynamic review board filtering interfaces, sorting by "Most Recent" and "Lowest Rating" while avoiding bot-detection modal popups.',
-        acceptanceTest: 'Successfully extracts 10 recent negative reviews from a major software category on G2 without triggering a verification challenge.'
+        title: 'Accela & CivicPlus Calendar Delta Poller',
+        description: 'Navigates municipal permit inspection calendars, extracts available date cells via Stagehand DOM selectors, and computes SHA-256 hashes so unchanged polls consume zero LLM tokens.',
+        acceptanceTest: 'Detects a synthetic cancelled inspection slot across 10 municipal portals within 90 seconds at $0 token burn on unchanged polls.'
       },
       {
         order: 2,
-        title: 'Account Identity Triangulator',
-        description: 'Takes fuzzy inputs ("VP of IT at a mid-market hospital in Ohio"); searches LinkedIn boolean strings to isolate the 3 most likely matching companies and contact names.',
-        acceptanceTest: 'Accurately identifies the correct company profile from a simulated anonymous review bio in 7 out of 10 test cases.'
+        title: 'Micro-RFP (<$50k) Portal Harvester & Filter',
+        description: 'Traverses county procurement tables, filters NAICS/NIGP trade codes for electrical/HVAC/concrete/painting under $50k, and downloads addendum PDFs.',
+        acceptanceTest: 'Extracts 15 active county micro-RFPs with 100% accurate closing timestamps and zero duplicate rows.'
       },
       {
         order: 3,
-        title: 'Displacement Angle Formatter',
-        description: 'Transforms a technical customer complaint ("API rate limits break our syncing daily") into a hyper-targeted SDR email opening hook.',
-        acceptanceTest: 'Produces 5 production-grade cold outreach hooks that directly reference specific technical gripes without sounding creepy.'
+        title: 'Municipal Vendor Packet Form Stager',
+        description: 'Maps canonical contractor entity metadata (EIN, license #, surety bond #, COI PDF) into municipal bid submission portals up to the final officer signature gate.',
+        acceptanceTest: 'Populates a 12-field county vendor compliance form with 100% field accuracy and halts deterministically before final submit.'
       }
     ],
     humanMap: {
-      weeklyHourBudget: 20,
+      weeklyHourBudget: 14,
       breakdown: [
-        { task: 'Demo Calls & Product Marketing Sales', hours: 7 },
-        { task: 'Quality Control (Validating fuzzy account matches)', hours: 6 },
-        { task: 'Battlecard Strategy & Template Tuning', hours: 4 },
-        { task: 'Fleet Maintenance', hours: 3 }
+        { task: 'Cross-Selling Seat Sniper & GovDesk to Existing Sub Radar GCs', hours: 4 },
+        { task: 'Co-Signing Municipal Micro-RFP Bid Packets (Tier-3 Gate)', hours: 4 },
+        { task: 'Confirming High-Priority Inspection Slot Reschedules', hours: 3 },
+        { task: 'Municipal Portal Selector Maintenance', hours: 3 }
       ]
     },
     cashPlan7Day: [
-      { day: 1, action: 'Set up Bot fleet VM; train Dynamic Review Board Monitor Skill on 3 top enterprise competitors in the ATS market.', artifact: 'Review monitor skill ready', revenueTrigger: 'Infra ready', revenue: 0 },
-      { day: 2, action: 'Trap-01 crawls recent 1-star and 2-star reviews across ATS incumbents; extract 25 verified complaints on support and billing bugs.', artifact: '25 high-pain churn complaints', revenueTrigger: 'Signals extracted', revenue: 0 },
-      { day: 3, action: 'IDResolve-01 triangulates 12 specific mid-market companies that authored reviews; Battlecard-01 compiles custom displacement briefs.', artifact: '12 Account Battlecards', revenueTrigger: 'Deliverable compiled', revenue: 0 },
-      { day: 4, action: 'Manually reach out via LinkedIn/Email to VP Sales at high-growth modern ATS competitor: "Competitor just had 3 accounts blast their pricing hike. We identified them: [Link]."', artifact: 'Targeted competitive outreach', revenueTrigger: 'Pitch delivery', revenue: 0 },
-      { day: 5, action: 'Host 20-minute screen-share; walk through live accounts and show how SDRs deploy battlecards immediately.', artifact: 'Live displacement demo', revenueTrigger: 'Contract proposed', revenue: 0 },
-      { day: 6, action: 'Close client on Core Retainer ($2,000/mo) to receive real-time churn alerts continuously.', artifact: 'Paid Stripe invoice ($2,000 cash)', revenueTrigger: 'Payment confirmed', revenue: 2000 },
-      { day: 7, action: 'Configure Push-01 to route all newly identified churn accounts directly into client inbound Slack pipeline.', artifact: 'Live Slack webhook pipeline', revenueTrigger: 'System running', revenue: 2000 }
+      { day: 1, action: 'Configure SlotScout-01–04 and BidScout-01–03 on 10 local municipal permit calendars (Accela) and county procurement boards.', artifact: '10 Municipal Portals Wired', revenueTrigger: 'Infra ready', revenue: 0 },
+      { day: 2, action: 'Run BidScout across 25 county/school district portals; harvest 18 active <$50k trade micro-RFPs (HVAC, electrical, painting) with zero bidders.', artifact: '18 Uncontested Micro-RFP Dossiers', revenueTrigger: 'Live bid opportunities captured', revenue: 0 },
+      { day: 3, action: 'Run SlotScout on city commercial permit calendars; capture 4 cancelled electrical/mechanical rough-in inspection windows opening 10+ days early.', artifact: '4 Live Early Inspection Slot Alerts', revenueTrigger: 'Time-sensitive proof ready', revenue: 0 },
+      { day: 4, action: 'Pitch 15 existing Sub Radar / Trade Map contractor clients & local MEP trades: "$199 Jurisdiction Setup or $400/mo Seat Sniper retainer."', artifact: '15 Warm Contractor Pitches Sent', revenueTrigger: 'Outreach delivered', revenue: 0 },
+      { day: 5, action: 'Close 2 contractors on the $199 Jurisdiction Setup + 1 commercial electrician directly on the $400/mo Seat Sniper retainer ($798 cash).', artifact: '3 Paid Stripe Invoices ($798)', revenueTrigger: 'First $798 cleared', revenue: 798 },
+      { day: 6, action: 'Deliver 3 matched <$50k county annex RFPs to a commercial painting GC; upsell them to the $1,400/mo Full GovDesk Auto-Desk retainer.', artifact: 'Pre-filled County RFP Bid Packet', revenueTrigger: 'GovDesk expansion closed', revenue: 2198 },
+      { day: 7, action: 'Activate 15-minute continuous SlotScout polling and daily BidScout digests for all 4 paying contractors. Week 1 cash: $2,198.', artifact: '4 Active Municipal Radar Feeds', revenueTrigger: 'System running autonomously', revenue: 2198 }
     ],
     plan90Day: {
-      week4: { milestone: '3 Core clients; expand monitoring to 15 enterprise SaaS software categories', revenueTarget: '$6,000 MRR [estimate]' },
-      week8: { milestone: '7 Core clients; account resolution algorithm achieves >80% accuracy', revenueTarget: '$14,000 MRR [estimate]' },
-      week12: { milestone: '13 Core clients; integrate automated Salesforce lead creation via browser automation', revenueTarget: '$26,000 MRR [estimate]' }
+      week4: { milestone: '8 Seat Sniper clients ($400/mo) + 2 Full GovDesk clients ($1,400/mo) across 3 metro counties', revenueTarget: '$6,000 MRR [estimate]' },
+      week8: { milestone: '15 Seat Sniper clients + 5 Full GovDesk clients; jurisdiction pooling cuts bot polls by 65%', revenueTarget: '$13,000 MRR [estimate]' },
+      week12: { milestone: '25 Seat Sniper clients + 10 Full GovDesk clients; integrated with Sub Radar GC rosters', revenueTarget: '$24,000 MRR [estimate]' }
     },
     unitEconomics: {
       price: '$400/month (Seat Sniper) / $1,400/month (Full GovDesk) [comparable]',
@@ -1398,48 +1413,48 @@ export const BUSINESS_HANDBOOKS: BusinessHandbook[] = [
     },
     failureModes: [
       {
-        title: 'False Identity Resolution',
-        signal: 'Client reports target company wasn\'t using that software.',
-        killCriterion: 'Require human verification gate on all account matches until confidence score reaches >90%.'
+        title: 'Cancelled Inspection Slot Sniped Before GC Replies',
+        signal: 'Slot vanishes within 3 minutes of SMS notification.',
+        killCriterion: 'Use HoldGate-01 to place a reversible 15-minute staging hold on pre-authorized date ranges immediately upon detection.'
       },
       {
-        title: 'Aggressive Review Site Cloudflare Updates',
-        signal: 'Trap bot returns blank pages or access denied.',
-        killCriterion: 'Pivot crawling to secondary surfaces (Reddit, vendor community support forums, Twitter gripes).'
+        title: 'Municipal Portal Maintenance or ASP.NET Session Timeout',
+        signal: 'Accela / DemandStar table returns HTTP 500 or expired viewstate token.',
+        killCriterion: 'DBOS durable step automatically refreshes clean session state and resumes polling without losing the 15-minute cadence.'
       },
       {
-        title: 'Low Review Velocity in Niche Sectors',
-        signal: 'Churn events dry up.',
-        killCriterion: 'Expand monitoring surface to include GitHub issues, community Slack groups, and Jira bug tracker disclosures.'
+        title: 'Unqualified Micro-RFP Noise (Wrong Trade Classification)',
+        signal: 'Estimator rejects >30% of surfaced county RFPs as out-of-scope.',
+        killCriterion: 'Tighten SpecParse-01 NIGP/CSI division code filters and require prevailing-wage threshold match before alerting.'
       },
       {
-        title: 'Competitor Solves Product Defect',
-        signal: 'Complaint categories drop sharply.',
-        killCriterion: 'Re-target churn traps to newly released features or price-increase announcements.'
+        title: 'Unauthorized Binding Bid Submission Risk',
+        signal: 'Bot attempts to advance past vendor upload screen on county portal.',
+        killCriterion: 'Enforce Jev-AI Tier-3 Hard Human Lock (non_delegable_boundary.noul >= 0.30) so final municipal bid signatures are 100% human-executed.'
       }
     ],
     riskLegalCompliance: {
-      platformToS: 'Review directories discourage automated extraction; managed via non-logged-in residential browser sessions strictly reading public review feeds.',
-      dataAndPrivacy: 'Resolving public corporate identity data does not violate personal privacy laws when confined to professional B2B contexts (B2B legitimate interest under GDPR).',
-      contractAndPayment: 'Standard B2B SaaS intelligence agreement; no guarantees that target churned accounts will convert.',
-      licensing: 'No regulatory licenses required.'
+      platformToS: 'Municipal procurement boards and permit scheduling calendars are public government infrastructure funded by taxpayers; read-only polling at 15-minute intervals respects server load.',
+      dataAndPrivacy: 'Strictly public municipal bid notices, permit numbers, and corporate contractor COI/W-9 records. Zero consumer PII.',
+      contractAndPayment: 'B2B retainer via Stripe; contract explicitly states client officer must review and sign all binding municipal bid submissions (Tier-3 Human Lock).',
+      licensing: 'No professional license required to monitor public procurement notices or prepare clerical bid drafts for client signature.'
     },
     honestCaseAgainst: {
-      argument: 'Many online reviews on platforms like G2 are authored by disgruntled former employees or low-level users who possess zero purchasing authority, making some churn signals complete dead ends for enterprise sales reps. If an SDR team burns 50 hours chasing "ghost" churn leads that don\'t have the power to switch software, they will cancel the service.',
-      operatorVerdict: 'I still bet on this because enterprise B2B sales cycles are so hyper-competitive that even landing just one 6-figure displacement deal makes the entire annual retainer an undeniable positive ROI.'
+      argument: 'If a contractor only operates in a tiny rural township with zero inspection backlogs and very few public works RFPs, a monthly Seat Sniper subscription will not have enough slot volume to justify the retainer.',
+      operatorVerdict: 'I still bet on this in Stage 4 because in high-growth metro corridors (Austin, Dallas, Phoenix, Miami, Sacramento), commercial inspection backlogs routinely stretch 3–4 weeks and a single sniped slot pays for an entire year of Seat Sniper.'
     },
     first5Sales: {
       targets: [
-        'VP of Sales at a challenger CRM (Competing with Salesforce)',
-        'Head of Growth at an emerging Applicant Tracking System (Competing with Greenhouse)',
-        'Director of Outbound at a modern helpdesk platform (Competing with Zendesk)',
-        'CMO of a modern cloud-billing engine (Competing with Chargebee)',
-        'VP Product Marketing at a fast-growing cybersecurity platform'
+        'Commercial Electrical Contractor in Austin, TX (Active on AB+C Permit Portal)',
+        'Commercial HVAC & Mechanical Subcontractor in Dallas-Fort Worth, TX',
+        'Municipal Paving & Concrete Contractor in Sacramento County, CA',
+        'Commercial Fire Alarm & Low-Voltage Installer in Miami-Dade, FL',
+        'Public Works Painting & Coating Subcontractor in Hamilton County, OH'
       ],
       coldPitch: {
-        subject: '3 accounts ditching [Competitor] over API bugs this week',
-        body: 'Hey [First Name] — 3 mid-market companies posted detailed breakdowns this week about why they are actively looking to replace [Competitor] due to their recent pricing hike and API sync failures. Our system identified the exact accounts and the IT leaders experiencing the issue. Here is the dossier on the first two accounts: [Link]. I run a private displacement pipeline tracking [Competitor]\'s unhappy accounts 24/7. Want our fleet to drop these directly to your SDRs each week?',
-        wordCount: 79
+        subject: 'Earlier inspection slot on your [Permit #] + 2 county RFPs',
+        body: 'Hey [First Name] — our municipal portal bot noticed your commercial electrical permit ([Permit #]) is queued 3 weeks out on the city inspection calendar. This morning a cancelled rough-in slot opened 11 days earlier, plus the county just posted a $38,500 annex electrical micro-RFP with zero bidders so far: [Link]. Our system polls 10 local municipal calendars every 15 minutes to snipe cancelled inspection slots and flag <$50k trade RFPs. Want me to wire your active permits into the radar this week?',
+        wordCount: 84
       }
     }
   }
