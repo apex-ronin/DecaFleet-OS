@@ -1,0 +1,1 @@
+Added 4-stage ROADMAP.md, ported degraded bot quick-reboot recovery (rebootDegradedBots, /api/bot-health/reboot, UI controls), and standardized metadata.json identity to DecaFleet-OS.
