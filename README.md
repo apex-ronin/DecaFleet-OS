@@ -10,7 +10,18 @@
 
 `DecaFleet-OS` is the live production execution platform for a **single-workstation, 10-agent commercial service fleet** (`Hermes Agent + Stagehand + LiteLLM + DBOS`) supervised by 1 human operator. It executes a 4-Stage Sovereign Master Plan across **6 zero-credential / no-login B2B service lines**, starting immediately on Day 1 with **Stage 1: `C1 Sub Radar` (General Contractor Subcontractor License, Surety Bond & Workers'-Comp Compliance Monitoring)**.
 
-> 📋 **Project Governance & Roadmap:** See [`ROADMAP.md`](./ROADMAP.md) for the complete 4-Stage operational timeline, gate criteria, and VM multiplexing matrix; [`CHANGELOG.md`](./CHANGELOG.md) for `v1.0.0` release notes and commit history; [`CONTRIBUTING.md`](./CONTRIBUTING.md) for Conventional Commit standards; and [`SECURITY.md`](./SECURITY.md) for Zero-Credential and Jev-AI policies.
+> 📋 **Project Governance & Roadmap:** See [`ROADMAP.md`](./ROADMAP.md) for the complete 4-Stage operational timeline, gate criteria, and VM multiplexing matrix; [`CHANGELOG.md`](./CHANGELOG.md) for `v1.0.0` release notes; [`COMMIT_NOTES.md`](./COMMIT_NOTES.md) for the full commit-by-commit ledger; [`CONTRIBUTING.md`](./CONTRIBUTING.md) for Conventional Commit standards; and [`SECURITY.md`](./SECURITY.md) for Zero-Credential and Jev-AI policies.
+> ⚖️ **Companion Repository:** For the standalone Multi-LLM Competition Arena, Forensic Contender Scanner, and archived `DecaFleet-2026` tournament corpus, see **[`Apex-Tribunal-Engine`](https://github.com/apex-ronin/Apex-Tribunal-Engine)**.
+
+---
+
+## Table of Contents
+
+1. [Core Constitutional Laws & System Architecture](#1-core-constitutional-laws--system-architecture)
+2. [The 4-Stage Revenue Sequence (6 Complete 17-Section Handbooks)](#2-the-4-stage-revenue-sequence-6-complete-17-section-handbooks)
+3. [Stage 1 (`C1: Sub Radar`) — Day 1 Live Execution & Deliverables](#3-stage-1-c1-sub-radar--day-1-live-execution--deliverables)
+4. [Repository Structure & Key Entrypoints](#4-repository-structure--key-entrypoints)
+5. [Quick Start, Environment Setup & CLI Commands](#5-quick-start-environment-setup--cli-commands)
 
 ---
 
@@ -102,9 +113,12 @@ flowchart LR
 ```text
 DecaFleet-OS/
 ├── server.ts                                      # Express + Vite server, Jev-AI System One Gate & Sub Radar API
-├── CHANGELOG.md                                   # Semantic release & commit notes (v0.2.0 -> v1.0.0)
+├── ROADMAP.md                                     # 4-Stage Sovereign Master Plan timeline & gate criteria
+├── CHANGELOG.md                                   # Semantic release & changelog notes (v0.2.0 -> v1.0.0)
+├── COMMIT_NOTES.md                                # Complete commit-by-commit audit & release ledger
 ├── CONTRIBUTING.md                                # Conventional Commits & pre-commit verification guide
 ├── SECURITY.md                                    # Zero-Credential mandate & 3-Tier Jev-AI safety policy
+├── metadata.json                                  # Canonical project metadata (DecaFleet-OS)
 ├── .env.example                                   # Template for TYPESAFE_API_KEY & runtime environment vars
 ├── scripts/
 │   ├── run_sub_radar_day1_audit.ts                # Stage 1 Day 1 40-Sub Registry Scraper, Diff & Packet Runner
@@ -183,7 +197,9 @@ npm run lint
 | :--- | :--- | :--- |
 | `POST` | `/api/sub-radar/ingest-diff` | Runs `BoardScout-01..04` + `DiffEngine-01..02` across the 40-sub roster, flags state board deltas, updates bot telemetry, and adjudicates all alerts + the \$149 Audit Packet via Jev-AI (`jev-latest`). |
 | `GET` | `/api/sub-radar/audit-packet` | Returns the complete 40-Subcontractor Liability Audit Packet metadata, breach diffs, and Markdown report. |
-| `POST` | `/api/jev-ai/evaluate` | Evaluates a single bot artifact across the 6 atomic System One questions (`choice`, `noul`, `score`). |
+| `GET` | `/api/jev-ai/status` | Returns Jev-AI (`jev-latest`) provider configuration status without exposing secret values (`/api/gate/status` alias supported). |
+| `POST` | `/api/jev-ai/evaluate` | Evaluates a single bot artifact across the 6 atomic System One questions (`choice`, `noul`, `score`) (`/api/gate/evaluate` alias supported). |
 | `POST` | `/api/jev-ai/evaluate-batch` | Batch-evaluates multiple outbound artifacts through the 3-Tier Constitutional Gate. |
 | `GET` | `/api/bot-health` | Returns real-time health, DBOS checkpoints, CPU/RAM, and Stagehand self-healing telemetry for `bot-01`..`bot-10`. |
-| `POST` | `/api/bot-health/action` | Triggers Stagehand selector self-healing (`stagehand_heal`, `heal_all`), drift simulation, or session recycling. |
+| `POST` | `/api/bot-health/action` | Triggers Stagehand selector self-healing (`stagehand_heal`, `heal_all`), `quick_reboot`, drift simulation, or session recycling. |
+| `POST` | `/api/bot-health/reboot` | Dedicated Quick-Reboot endpoint for targeted or batch recovery of degraded persistent browser agents. |
