@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ShortTermScheduleView } from './ShortTermScheduleView.tsx';
 import { PORTFOLIO_ROADMAP } from '../data/handbooks.ts';
 import { evaluateExpansionGate } from '../utils/calculator.ts';
 import {
@@ -12,7 +13,9 @@ import {
   Clock,
   Sliders,
   XCircle,
-  Cpu
+  Cpu,
+  Calendar,
+  Layers
 } from 'lucide-react';
 
 interface PortfolioRoadmapViewProps {
@@ -21,6 +24,7 @@ interface PortfolioRoadmapViewProps {
 
 export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSelectBusiness }) => {
   const [velocityMode, setVelocityMode] = useState<'blitz45' | 'days12' | 'legacy365'>('blitz45');
+  const [roadmapViewMode, setRoadmapViewMode] = useState<'short_term' | 'macro_stages'>('short_term');
 
   // Interactive Expansion Gate Simulator state
   const [retainerClients, setRetainerClients] = useState<number>(3);
@@ -53,6 +57,36 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
 
   return (
     <div className="space-y-6">
+      {/* View Switcher: Short-Term Operational Schedule vs 4-Stage Macro Architecture */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <button
+          onClick={() => setRoadmapViewMode('short_term')}
+          className={`px-4 py-2 font-bold text-xs rounded-lg transition-colors flex items-center gap-2 cursor-pointer ${
+            roadmapViewMode === 'short_term'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+        >
+          <Calendar className="w-4 h-4 text-emerald-400" />
+          <span>Stage 1 Short-Term Schedule (Starting Today: Nov 2, 2026)</span>
+        </button>
+        <button
+          onClick={() => setRoadmapViewMode('macro_stages')}
+          className={`px-4 py-2 font-bold text-xs rounded-lg transition-colors flex items-center gap-2 cursor-pointer ${
+            roadmapViewMode === 'macro_stages'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+        >
+          <Layers className="w-4 h-4 text-blue-400" />
+          <span>4-Stage Long-Term Master Plan &amp; Expansion Gate</span>
+        </button>
+      </div>
+
+      {roadmapViewMode === 'short_term' ? (
+        <ShortTermScheduleView />
+      ) : (
+        <div className="space-y-6">
       {/* Intro Header + Velocity Mode Switcher */}
       <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -589,6 +623,8 @@ export const PortfolioRoadmapView: React.FC<PortfolioRoadmapViewProps> = ({ onSe
           </div>
         </div>
       </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -13,7 +13,8 @@
     "lint": "tsc --noEmit",
     "test": "tsx --test src/utils/calculator.test.ts",
     "audit:sub-radar": "tsx scripts/run_sub_radar_day1_audit.ts",
-    "audit:master-plan": "tsx scripts/run_master_plan_jev_audit.ts"
+    "audit:master-plan": "tsx scripts/run_master_plan_jev_audit.ts",
+    "pdf:instruction-sheet": "tsx scripts/generate_short_term_roadmap_pdf.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

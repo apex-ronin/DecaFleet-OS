@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
@@ -1176,6 +1177,17 @@ async function startServer() {
       res.status(500).json({
         error: err?.message || 'Sub Radar live diff ingestion failed'
       });
+    }
+  });
+
+  app.get('/api/sub-radar/instruction-sheet-pdf', (_req, res) => {
+    const pdfPath = path.resolve(process.cwd(), 'docs/DecaFleet_Stage1_ShortTerm_Instruction_Sheet.pdf');
+    if (fs.existsSync(pdfPath)) {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="DecaFleet_Stage1_ShortTerm_Instruction_Sheet.pdf"');
+      res.sendFile(pdfPath);
+    } else {
+      res.status(404).json({ error: 'Instruction sheet PDF not found. Run npm run pdf:instruction-sheet first.' });
     }
   });
 
