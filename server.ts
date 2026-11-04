@@ -1191,6 +1191,28 @@ async function startServer() {
     }
   });
 
+  app.get('/api/print-package-pdf', (_req, res) => {
+    const pdfPath = path.resolve(process.cwd(), 'docs/DecaFleet_Master_Print_Package_Natalie_and_Jay.pdf');
+    if (fs.existsSync(pdfPath)) {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="DecaFleet_Master_Print_Package_Natalie_and_Jay.pdf"');
+      res.sendFile(pdfPath);
+    } else {
+      res.status(404).json({ error: 'Master print package PDF not found. Run npm run pdf:print-package first.' });
+    }
+  });
+
+  app.get('/api/download-tarball', (_req, res) => {
+    const tarPath = path.resolve(process.cwd(), 'decafleet-os-v1.0.0-server.tar.gz');
+    if (fs.existsSync(tarPath)) {
+      res.setHeader('Content-Type', 'application/gzip');
+      res.setHeader('Content-Disposition', 'attachment; filename="decafleet-os-v1.0.0-server.tar.gz"');
+      res.sendFile(tarPath);
+    } else {
+      res.status(404).json({ error: 'Server tarball not found. Run npm run package:tarball first.' });
+    }
+  });
+
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },

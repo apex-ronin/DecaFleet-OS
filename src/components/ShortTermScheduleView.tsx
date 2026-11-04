@@ -288,13 +288,30 @@ Reply "UNLOCK" or click the co-signed release link below and we will dispatch th
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
             <a
+              href="/api/download-tarball"
+              download="decafleet-os-v1.0.0-server.tar.gz"
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+            >
+              <Terminal className="w-4 h-4" />
+              <span>Server Tarball (1.08 MB)</span>
+            </a>
+            <a
+              href="/api/print-package-pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+            >
+              <Download className="w-4 h-4 text-slate-950" />
+              <span>Print Master Package (Natalie &amp; Jay) (378 KB)</span>
+            </a>
+            <a
               href="/api/sub-radar/instruction-sheet-pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
             >
-              <Download className="w-4 h-4" />
-              <span>Download Written PDF (310 KB)</span>
+              <FileText className="w-4 h-4" />
+              <span>Field Manual PDF (310 KB)</span>
             </a>
             <a
               href="#day-1"

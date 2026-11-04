@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  decafleet-os:
+    build: .
+    container_name: decafleet-os
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - TYPESAFE_API_KEY=${TYPESAFE_API_KEY:-}
+      - TYPESAFE_API_URL=https://api.typesafe.ai/v1/systemone
+      - TYPESAFE_MODEL=jev-latest
+    volumes:
+      - ./shared/data:/app/shared/data
+      - ./shared/reports:/app/shared/reports
+      - ./docs:/app/docs
+
